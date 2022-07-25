@@ -1,7 +1,8 @@
 [all:vars]
-ansible_connection = ssh
+ansible_connection = ansible.netcommon.httpapi
 user = cisco
 pwd = cisco
+
 
 [spine]
 10.10.53.153
