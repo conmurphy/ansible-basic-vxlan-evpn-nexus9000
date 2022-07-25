@@ -4,10 +4,10 @@ user = cisco
 pwd = cisco
 
 [spine]
-spine-1
-spine-2
+10.10.53.153
+10.10.53.154
 
 [leaf]
-leaf-1
-leaf-2
+10.10.53.155
+10.10.53.156
 
