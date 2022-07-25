@@ -1,0 +1,91 @@
+# Variables to be configured only on leaf switches
+
+# VXLAN related features to be enabled on leaf switches
+
+vxlan_features:
+  - feature: ospf
+    state: enabled
+  - feature : bgp
+    state: enabled
+  - feature: pim
+    state: enabled
+  - feature: nv overlay
+    state: enabled
+  - feature: vn-segment-vlan-based
+    state: enabled
+  - feature: interface-vlan
+    state: enabled
+
+# Spine facing interfaces
+
+spine_facing_ifaces:
+  - name: Ethernet1/1
+  - name: Ethernet1/2
+
+# Loopback interfaces to be used for various tasks
+
+loopback_ifaces:
+  - name: Loopback0
+# - name: Loopback1
+
+# Variables to be used for PIM configuration
+
+leaf1_loopback0: 10.101.1.1
+leaf2_loopback0: 10.101.1.2
+
+
+rp_address: 1.2.3.4
+
+# BGP Configuration variables
+
+bgp_spine_neighbors:
+  - neighbor: '10.201.1.1'
+  - neighbor: '10.201.1.2'
+
+# VLAN to VNI Mappings for Tenant1
+
+tenant_a_vlan_to_vni:
+  - vlan_id: '10'
+    name: VLAN10
+    mapped_vni: '100010'
+  - vlan_id: '20'
+    name: VLAN20
+    mapped_vni: '100020'
+
+# L2 VNIs for Tenant A
+
+tenant_a_l2_vni:
+  - vni: '100010'
+    mcast_grp: '224.1.1.192'
+  - vni: '100020'
+    mcast_grp: '224.1.1.192'
+
+# L3 VNI for Tenant A
+
+tenant_a_l3_vni:
+  - vni: '100999'
+
+# VRF Parameters for Tenant A
+
+tenant_a_vrf_config:
+  - name: tenant_a
+    afi: ipv4
+    safi: unicast
+    vni: '100999'
+
+# List of SVIs corresponding to L2VNIs
+
+l2_vni_svi_list:
+  - vlan_id: '10'
+    vrf: tenant_a
+    ip: 10.10.1.254/24
+  - vlan_id: '20'
+    vrf: tenant_a
+    ip: 10.20.1.254/24
+    
+
+# List of SVIs corresponding to L2VNIs
+
+l3_vni_svi_list:
+  - vlan_id: '999'
+    vrf: tenant_a

@@ -1,0 +1,41 @@
+# Variables to be configured only on spine switches
+
+# VXLAN related features to be enabled on spine switches
+
+vxlan_features:
+  - feature: ospf
+    state: enabled
+  - feature : bgp
+    state: enabled
+  - feature: pim
+    state: enabled
+  - feature: nv overlay
+    state: enabled
+
+# Leaf facing interfaces to be configured as "unnumbered"
+
+leaf_facing_ifaces:
+  - name: Ethernet1/1
+  - name: Ethernet1/2
+
+# Loopback interface to be used for various tasks
+
+loopback_ifaces:
+  - name: Loopback0
+  - name: Loopback1
+
+# Variables to be used within the Play
+
+spine1_loopback0: 10.201.1.1
+spine2_loopback0: 10.201.1.2
+
+# Anycast RP Address to be configured on Spines
+
+anycast_rp_address: 1.2.3.4
+
+# BGP Configuration variables
+
+bgp_leaf_neighbors:
+  - neighbor: '10.101.1.1'
+  - neighbor: '10.101.1.2'
+

@@ -1,135 +1,124 @@
-
-
-    - name: CONFIGURE HOSTNAME
-      nxos_config:
-        lines: hostname {{ inventory_hostname }}
-        provider: "{{ nxos_provider }}"
-
-    - name: ENABLE FEATURES
+---
+- name: VXLAN EVPN Configuration on Spine Switches
+  hosts: spines
+  connection: httpapi
+  gather_facts: no
+  tasks:
+    - name: Enabling necessary features
       nxos_feature:
-        feature: "{{item.feature }}"
-        provider: "{{ nxos_provider }}"
-      with_items: "{{ features }}"
+        feature: '{{ item.feature }}'
+        state: '{{ item.state }}'
+      with_items: '{{ vxlan_features }}'
 
-    - name: CONFIGURE PHYSICAL L3 INTERFACES
+    - name: Enabling EVPN overlay
+      nxos_evpn_global:
+        nv_overlay_evpn: true
+
+    - name: Creating Loopback interfaces to be used as PIM RP and Router-ID
       nxos_interface:
-        interface: "{{item.interface }}"
-        mode: layer3
+        name: loopback 0-1
         admin_state: up
-        provider: "{{ nxos_provider }}"
-      with_items: "{{ l3_interfaces }}"
+      ignore_errors: yes
 
-    - name: CONFIGURE LOOPBACK INTERFACES
+    - name: Assigning IP Addresses to the Loopback interfaces
+      nxos_l3_interface:
+        name: '{{ item.name }}'
+        ipv4: '{{ item.ipv4 }}'
+      with_items: '{{ loopback_ip }}'
+
+    - name: Configuring Leaf Facing Interfaces as L3 and with Jumbo MTU
       nxos_interface:
-        interface: "{{ item.interface }}"
-        provider: "{{ nxos_provider }}"
-      with_items: "{{ loopbacks }}"
+        name: '{{item.name}}'
+        mode: layer3
+        mtu: '9216'
+        admin_state: up
+      with_items: '{{ leaf_facing_ifaces }}'
 
-    - name: CONFIGURE INTERFACE IP ADDR
-      nxos_ip_interface:
-        interface: "{{ item.interface }}"
-        addr: "{{ item.addr }}"
-        mask: "{{ item.mask }}"
-        provider: "{{ nxos_provider }}"
-      with_items: 
-      - "{{ loopbacks }}"
-
-    - name: CHANGE INTERFACE MTU TO 9216
-      nxos_mtu: 
-        mtu: 9216
-        interface: "{{ item.interface }}"
-        state: present
-        provider: "{{ nxos_provider }}"
-      with_items: "{{ l3_interfaces }}"
-
-    - name: CONFIGURE INTERFACE IP UNNUMBERED
+    - name: Configuring Leaf Facing interfaces with IP Unnumbered Parameters
       nxos_config:
-        lines: 
+        lines:
           - medium p2p
           - ip unnumbered loopback 0
         parents:
-          - 'interface {{ item.interface }}'
-        provider: "{{ nxos_provider }}"
-      with_items: "{{ l3_interfaces }}"
+          - 'interface {{item.name}}'
+      with_items: '{{ leaf_facing_ifaces }}'
 
-    - name: CONFIGURE OSPF PROCESS ID AND AREA AND ROUTER ID
+    - name: Creating OSPF Process 'UNDERLAY'
       nxos_ospf_vrf:
-        ospf: "{{ ospf_process_id }}"
-        router_id: "{{ router_id }}"
-        provider: "{{ nxos_provider }}"
+        ospf: UNDERLAY
+        router_id: '{{ router_id }}'
 
-    - name: ASSOCIATE INTERFACES WITH OSPF PROCESS
-      nxos_interface_ospf:
-        interface: "{{ item.interface }}"
-        ospf: "{{ ospf_process_id }}"
-        area: "{{ ospf_area }}"
-        provider: "{{ nxos_provider }}"
-      with_items: 
-      - "{{ l3_interfaces }}"
-      - "{{ loopbacks }}"
-
-    - name: CONFIGURE OSPF INTERFACES NETWORK P2P
-      nxos_config:
-        lines: ip ospf network point-to-point
-        parents:
-          - 'interface {{ item.interface }}'
-        provider: "{{ nxos_provider  }}"
-      with_items: "{{ l3_interfaces }}"
-
-    - name: CONFIGURE PIM ANYCAST RP
+    - name: Configuring Leaf Facing Interfaces as OSPF p2p interfaces
       nxos_config:
         lines:
-          - "ip pim anycast-rp {{ rp_address }} {{ s1_loopback }}"
-          - "ip pim anycast-rp {{ rp_address }} {{ s2_loopback }}"
-        provider: "{{ nxos_provider }}"
+          - ip ospf network point-to-point
+        parents:
+          - 'interface {{ item.name }}'
+      with_items: '{{ leaf_facing_ifaces }}'
 
-    - name: CONFIGURE PIM RP
+    - name: Assigning Interfaces to the OSPF Process
+      nxos_interface_ospf:
+        interface: '{{ item.name }}'
+        ospf: UNDERLAY
+        area: '0'
+      with_items:
+        - '{{ leaf_facing_ifaces }}'
+        - '{{ loopback_ifaces }}'
+
+    - name: Configuring PIM RP Addresses
       nxos_pim_rp_address:
-        rp_address: "{{ rp_address }}"
-        provider: "{{ nxos_provider }}"
-
-    - name: CONFIGURE PIM INTERFACES
-      nxos_pim_interface:
-        interface: "{{ item.interface }}"
-        sparse: true
-        provider: "{{ nxos_provider }}"
-      with_items: "{{ l3_interfaces }}"
-
-    - name: ENABLE NV OVERLAY EVPN
-      nxos_evpn_global:
-        nv_overlay_evpn: true
-        provider: "{{ nxos_provider }}"
-
-    - name: CONFIGURE BGP ASN AND ROUTER ID
-      nxos_bgp:
-        asn: "{{ asn }}"
-        router_id: "{{ router_id }}"
-        provider: "{{ nxos_provider }}"
+        rp_address: '{{ anycast_rp_address }}'
         state: present
 
-    - name: CONFIGURE BGP NEIGHBORS
-      nxos_bgp_neighbor:
-        asn: "{{ asn }}"
-        neighbor: "{{ item.neighbor }}"
-        remote_as: "{{ item.remote_as }}"
-        update_source: "{{ item.update_source }}"
-        provider: "{{ nxos_provider }}"
-      with_items: "{{ bgp_neighbors }}"
+    - name: Configuring PIM Anycast RP Address
+      nxos_config:
+        lines:
+          -  'ip pim anycast-rp {{ anycast_rp_address }} {{ spine1_loopback0 }}'
+          -  'ip pim anycast-rp {{ anycast_rp_address }} {{ spine2_loopback0 }}'
 
-    - name: CONFIGURE L2VPN EVPN ADDRESS FAMILY FOR BGP NEIGHBORS
+    - name: Configuring PIM Sparse Mode on L3 interfaces
+      nxos_pim_interface:
+        interface: '{{ item.name }}'
+        sparse: yes
+      with_items:
+        -  '{{ leaf_facing_ifaces}}'
+        -  '{{ loopback_ifaces }}'
+
+    - name: Creating BGP Process
+      nxos_bgp:
+        asn: '65001'
+        router_id: '{{ router_id }}'
+        state: present
+
+    - name: Configuring Leaves as BGP Neighbors
+      nxos_bgp_neighbor:
+        asn: '64520'
+        neighbor: '{{ item.neighbor }}'
+        remote_as: '64520'
+        update_source: Loopback0
+      with_items: '{{ bgp_leaf_neighbors }}'
+
+    - name: Enabling L2VPN EVPN Address-Family Parameters For Leaf Neighbors
       nxos_bgp_neighbor_af:
-        asn: "{{ asn }}"
-        neighbor: "{{ item.neighbor }}"
+        asn: '64520'
+        neighbor: '{{ item.neighbor }}'
         afi: l2vpn
         safi: evpn
         send_community: both
-        route_reflector_client: "true"
-        provider: "{{ nxos_provider }}"
-      with_items: "{{ bgp_neighbors }}"
+        state: present
+      with_items: '{{ bgp_leaf_neighbors }}'
 
-    - name: SAVE RUN CONFIG TO STARTUP CONFIG
+    - name: Enabling IPv4 Unicast Address-Family Parameters For Leaf Neighbors
+      nxos_bgp_neighbor_af:
+        asn: '64520'
+        neighbor: '{{ item.neighbor }}'
+        afi: ipv4
+        safi: unicast
+        send_community: both
+        route_reflector_client: yes
+        state: present
+      with_items: '{{ bgp_leaf_neighbors }}'
+
+    - name: Saving running-configuration...
       nxos_config:
-        save: yes
-        provider: "{{ nxos_provider }}"
-
-
+        save_when: changed

@@ -1,6 +1,19 @@
+
 ---
 
+loopback_ip:
+    - name: Loopback0
+      # description: Underlay_Unicast_Routing_Domain_Router-ID
+      ipv4: 10.101.1.2/32
+
+# OSPF/BGP Router-ID
 router_id: 10.101.1.2
 
-loopbacks:
-  - { interface: loopback0, addr: 10.101.1.2, mask: 32 }
+---
+vlans_unique:
+  - vlan_id: 10
+    admin_state: up
+    name: VLAN10
+  - vlan_id: 20
+    admin_state: up
+    name: VLAN20
