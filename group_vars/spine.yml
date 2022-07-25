@@ -9,7 +9,7 @@ vxlan_features:
     state: enabled
   - feature: pim
     state: enabled
-  - feature: nv overlay
+  - feature: nv overlays
     state: enabled
 
 # Leaf facing interfaces to be configured as "unnumbered"
