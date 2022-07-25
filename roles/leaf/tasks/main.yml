@@ -1,6 +1,6 @@
 ---
 - name: VXLAN EVPN Configuration on Leaf Switches
-  hosts: leaves
+  #hosts: leaves
   connection: httpapi
   gather_facts: no
   tasks:
