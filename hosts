@@ -1,0 +1,13 @@
+[all:vars]
+ansible_connection = local
+user = cisco
+pwd = cisco
+
+[spine]
+spine-1
+spine-2
+
+[leaf]
+leaf-1
+leaf-2
+
