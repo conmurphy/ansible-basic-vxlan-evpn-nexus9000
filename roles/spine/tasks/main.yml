@@ -1,6 +1,5 @@
 ---
 - name: VXLAN EVPN Configuration on Spine Switches
-  #hosts: spines
   connection: httpapi
   gather_facts: no
   tasks:
