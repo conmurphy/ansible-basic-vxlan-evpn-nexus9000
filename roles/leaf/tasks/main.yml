@@ -1,220 +1,215 @@
----
-- name: VXLAN EVPN Configuration on Leaf Switches
-  connection: httpapi
-  gather_facts: no
-  tasks:
-    - name: Enabling necessary features
-      nxos_feature:
-        feature: '{{ item.feature }}'
-        state: '{{ item.state }}'
-      with_items: '{{ vxlan_features }}'
+- name: Enabling necessary features
+  nxos_feature:
+    feature: '{{ item.feature }}'
+    state: '{{ item.state }}'
+  with_items: '{{ vxlan_features }}'
 
-    - name: Enabling EVPN overlay
-      nxos_evpn_global:
-        nv_overlay_evpn: true
+- name: Enabling EVPN overlay
+  nxos_evpn_global:
+    nv_overlay_evpn: true
 
-    - name: Creating Loopback interfaces to be used as Router-ID and VTEP-ID
-      nxos_interface:
-        name: loopback 0-1
-        admin_state: up
-      ignore_errors: yes
+- name: Creating Loopback interfaces to be used as Router-ID and VTEP-ID
+  nxos_interface:
+    name: loopback 0-1
+    admin_state: up
+  ignore_errors: yes
 
-    - name: Assigning IP Addresses to the Loopback interfaces
-      nxos_l3_interface:
-        name: '{{ item.name }}'
-        ipv4: '{{ item.ipv4 }}'
-      with_items: '{{ loopback_ip }}'
+- name: Assigning IP Addresses to the Loopback interfaces
+  nxos_l3_interface:
+    name: '{{ item.name }}'
+    ipv4: '{{ item.ipv4 }}'
+  with_items: '{{ loopback_ip }}'
 
-    - name: Configuring Spine Facing Interfaces as L3 and with Jumbo MTU
-      nxos_interface:
-        name: '{{item.name}}'
-        mode: layer3
-        mtu: '9216'
-        admin_state: up
-      with_items: '{{ spine_facing_ifaces }}'
+- name: Configuring Spine Facing Interfaces as L3 and with Jumbo MTU
+  nxos_interface:
+    name: '{{item.name}}'
+    mode: layer3
+    mtu: '9216'
+    admin_state: up
+  with_items: '{{ spine_facing_ifaces }}'
 
-    - name: Configuring Spine Facing interfaces with IP Unnumbered Parameters
-      nxos_config:
-        lines:
-          - medium p2p
-          - ip unnumbered loopback 0
-        parents:
-          - 'interface {{item.name}}'
-      with_items: '{{ spine_facing_ifaces }}'
+- name: Configuring Spine Facing interfaces with IP Unnumbered Parameters
+  nxos_config:
+    lines:
+      - medium p2p
+      - ip unnumbered loopback 0
+    parents:
+      - 'interface {{item.name}}'
+  with_items: '{{ spine_facing_ifaces }}'
 
-    - name: Creating OSPF Process 'UNDERLAY'
-      nxos_ospf_vrf:
-        ospf: UNDERLAY
-        router_id: '{{ router_id }}'
+- name: Creating OSPF Process 'UNDERLAY'
+  nxos_ospf_vrf:
+    ospf: UNDERLAY
+    router_id: '{{ router_id }}'
 
-    - name: Configuring Spine Facing Interfaces as OSPF p2p interfaces
-      nxos_config:
-        lines:
-          - ip ospf network point-to-point
-        parents:
-          - 'interface {{ item.name }}'
-      with_items: '{{ spine_facing_ifaces }}'
+- name: Configuring Spine Facing Interfaces as OSPF p2p interfaces
+  nxos_config:
+    lines:
+      - ip ospf network point-to-point
+    parents:
+      - 'interface {{ item.name }}'
+  with_items: '{{ spine_facing_ifaces }}'
 
-    - name: Assigning Interfaces to the OSPF Process
-      nxos_interface_ospf:
-        interface: '{{ item.name }}'
-        ospf: UNDERLAY
-        area: '0'
-      with_items:
-        - '{{ spine_facing_ifaces }}'
-        - '{{ loopback_ifaces }}'
+- name: Assigning Interfaces to the OSPF Process
+  nxos_interface_ospf:
+    interface: '{{ item.name }}'
+    ospf: UNDERLAY
+    area: '0'
+  with_items:
+    - '{{ spine_facing_ifaces }}'
+    - '{{ loopback_ifaces }}'
 
-    - name: Configuring PIM RP Addresses
-      nxos_pim_rp_address:
-        rp_address: '{{ rp_address }}'
-        state: present
+- name: Configuring PIM RP Addresses
+  nxos_pim_rp_address:
+    rp_address: '{{ rp_address }}'
+    state: present
 
-    - name: Configuring PIM Sparse Mode on L3 interfaces
-      nxos_pim_interface:
-        interface: '{{ item.name }}'
-        sparse: yes
-      with_items:
-        -  '{{ spine_facing_ifaces}}'
-        -  '{{ loopback_ifaces }}'
+- name: Configuring PIM Sparse Mode on L3 interfaces
+  nxos_pim_interface:
+    interface: '{{ item.name }}'
+    sparse: yes
+  with_items:
+    -  '{{ spine_facing_ifaces}}'
+    -  '{{ loopback_ifaces }}'
 
-    - name: Creating BGP Process
-      nxos_bgp:
-        asn: '64520'
-        router_id: '{{ router_id }}'
-        state: present
+- name: Creating BGP Process
+  nxos_bgp:
+    asn: '64520'
+    router_id: '{{ router_id }}'
+    state: present
 
-    - name: Configuring Spines as BGP Neighbors
-      nxos_bgp_neighbor:
-        asn: '64520'
-        neighbor: '{{ item.neighbor }}'
-        remote_as: '64520'
-        update_source: Loopback0
-      with_items: '{{ bgp_spine_neighbors }}'
+- name: Configuring Spines as BGP Neighbors
+  nxos_bgp_neighbor:
+    asn: '64520'
+    neighbor: '{{ item.neighbor }}'
+    remote_as: '64520'
+    update_source: Loopback0
+  with_items: '{{ bgp_spine_neighbors }}'
 
-    - name: Enabling L2VPN EVPN Address-Family Parameters For Spine Neighbors
-      nxos_bgp_neighbor_af:
-        asn: '64520'
-        neighbor: '{{ item.neighbor }}'
-        afi: l2vpn
-        safi: evpn
-        send_community: both
-        state: present
-      with_items: '{{ bgp_spine_neighbors }}'
+- name: Enabling L2VPN EVPN Address-Family Parameters For Spine Neighbors
+  nxos_bgp_neighbor_af:
+    asn: '64520'
+    neighbor: '{{ item.neighbor }}'
+    afi: l2vpn
+    safi: evpn
+    send_community: both
+    state: present
+  with_items: '{{ bgp_spine_neighbors }}'
 
-    - name: Enabling IPv4 Unicast Address-Family Parameters For Spine Neighbors
-      nxos_bgp_neighbor_af:
-        asn: '64520'
-        neighbor: '{{ item.neighbor }}'
-        afi: ipv4
-        safi: unicast
-        send_community: both
-        route_reflector_client: yes
-        state: present
-      with_items: '{{ bgp_spine_neighbors }}'
+- name: Enabling IPv4 Unicast Address-Family Parameters For Spine Neighbors
+  nxos_bgp_neighbor_af:
+    asn: '64520'
+    neighbor: '{{ item.neighbor }}'
+    afi: ipv4
+    safi: unicast
+    send_community: both
+    route_reflector_client: yes
+    state: present
+  with_items: '{{ bgp_spine_neighbors }}'
 
-    - name: Creating VLANs and Mapping Them to VXLAN VNIs
-      nxos_vlan:
-        vlan_id: '{{ item.vlan_id }}'
-        name: '{{ item.name }}'
-        mapped_vni: '{{ item.mapped_vni }}'
-      with_items: '{{ tenant_a_vlan_to_vni }}'
+- name: Creating VLANs and Mapping Them to VXLAN VNIs
+  nxos_vlan:
+    vlan_id: '{{ item.vlan_id }}'
+    name: '{{ item.name }}'
+    mapped_vni: '{{ item.mapped_vni }}'
+  with_items: '{{ tenant_a_vlan_to_vni }}'
 
-    - name: Creating Tenant VRF and Mapping it to L3VNI
-      nxos_vrf:
-        name: '{{ item.name }}'
-        vni: '{{ item.vni }}'
-        rd: auto
-        state: present
-      with_items: '{{ tenant_a_vrf_config }}'
+- name: Creating Tenant VRF and Mapping it to L3VNI
+  nxos_vrf:
+    name: '{{ item.name }}'
+    vni: '{{ item.vni }}'
+    rd: auto
+    state: present
+  with_items: '{{ tenant_a_vrf_config }}'
 
-    - name: Configuring AF specific settings for Tenant VRF
-      nxos_vrf_af:
-        vrf: '{{ item.name }}'
-        afi: ipv4
-        route_target_both_auto_evpn: yes
-      with_items: '{{ tenant_a_vrf_config }}'
+- name: Configuring AF specific settings for Tenant VRF
+  nxos_vrf_af:
+    vrf: '{{ item.name }}'
+    afi: ipv4
+    route_target_both_auto_evpn: yes
+  with_items: '{{ tenant_a_vrf_config }}'
 
-    - name: Creating VXLAN Tunnel Interface
-      nxos_interface:
-        interface: nve1
-        state: present
-        admin_state: up
+- name: Creating VXLAN Tunnel Interface
+  nxos_interface:
+    interface: nve1
+    state: present
+    admin_state: up
 
-    - name: Configuring VXLAN Tunnel Interface for MP-BGP EVPN Control Plane
-      nxos_vxlan_vtep:
-        interface: nve1
-        host_reachability: yes
-        source_interface: loopback1
+- name: Configuring VXLAN Tunnel Interface for MP-BGP EVPN Control Plane
+  nxos_vxlan_vtep:
+    interface: nve1
+    host_reachability: yes
+    source_interface: loopback1
 
-    - name: Adding L2 VNIs to VXLAN Tunnel Interface
-      nxos_vxlan_vtep_vni:
-        interface: nve1
-        vni: '{{ item.vni }}'
-        multicast_group: '{{ item.mcast_grp }}'
-        suppress_arp: no
-      with_items: '{{ tenant_a_l2_vni }}'
+- name: Adding L2 VNIs to VXLAN Tunnel Interface
+  nxos_vxlan_vtep_vni:
+    interface: nve1
+    vni: '{{ item.vni }}'
+    multicast_group: '{{ item.mcast_grp }}'
+    suppress_arp: no
+  with_items: '{{ tenant_a_l2_vni }}'
 
-    - name: Adding L3 VNI to VXLAN Tunnel Interfaces
-      nxos_vxlan_vtep_vni:
-        interface: nve1
-        vni: '{{ item.vni }}'
-        assoc_vrf: yes
-      with_items: '{{ tenant_a_l3_vni }}'
+- name: Adding L3 VNI to VXLAN Tunnel Interfaces
+  nxos_vxlan_vtep_vni:
+    interface: nve1
+    vni: '{{ item.vni }}'
+    assoc_vrf: yes
+  with_items: '{{ tenant_a_l3_vni }}'
 
-    - name: Configuring L2 VNIs for EVPN
-      nxos_evpn_vni:
-        vni: '{{ item.vni }}'
-        route_distinguisher: auto
-        route_target_both: auto
-      with_items: '{{ tenant_a_l2_vni }}'
+- name: Configuring L2 VNIs for EVPN
+  nxos_evpn_vni:
+    vni: '{{ item.vni }}'
+    route_distinguisher: auto
+    route_target_both: auto
+  with_items: '{{ tenant_a_l2_vni }}'
 
-    - name: Adding Tenant VRF Under BGP configuration
-      nxos_bgp_af:
-        asn: '64520'
-        vrf: '{{ item.name }}'
-        afi: '{{ item.afi }}'
-        safi: '{{ item.safi }}'
-      with_items: '{{ tenant_a_vrf_config }}'
+- name: Adding Tenant VRF Under BGP configuration
+  nxos_bgp_af:
+    asn: '64520'
+    vrf: '{{ item.name }}'
+    afi: '{{ item.afi }}'
+    safi: '{{ item.safi }}'
+  with_items: '{{ tenant_a_vrf_config }}'
 
-    - name: Configuring Distributed Anycast Gateway MAC Address on Leaves
-      nxos_config:
-        lines:
-          - fabric forwarding anycast-gateway-mac 0000.0000.000A
+- name: Configuring Distributed Anycast Gateway MAC Address on Leaves
+  nxos_config:
+    lines:
+      - fabric forwarding anycast-gateway-mac 0000.0000.000A
 
-    - name: Creating SVIs Corresponding to VNIs
-      nxos_interface:
-        name: 'vlan {{ item.vlan_id }}'
-        admin_state: up
-      with_items:
-        - '{{ l2_vni_svi_list }}'
-        - '{{ l3_vni_svi_list }}'
+- name: Creating SVIs Corresponding to VNIs
+  nxos_interface:
+    name: 'vlan {{ item.vlan_id }}'
+    admin_state: up
+  with_items:
+    - '{{ l2_vni_svi_list }}'
+    - '{{ l3_vni_svi_list }}'
 
-    - name: Adding SVIs to Tenant VRF
-      nxos_vrf_interface:
-        vrf: '{{ item.vrf }}'
-        interface: 'vlan {{ item.vlan_id }}'
-      with_items:
-        - '{{ l2_vni_svi_list }}'
-        - '{{ l3_vni_svi_list }}'
+- name: Adding SVIs to Tenant VRF
+  nxos_vrf_interface:
+    vrf: '{{ item.vrf }}'
+    interface: 'vlan {{ item.vlan_id }}'
+  with_items:
+    - '{{ l2_vni_svi_list }}'
+    - '{{ l3_vni_svi_list }}'
 
-    - name: Configuring L2 VNI SVIs with IP addresses
-      nxos_l3_interface:
-        name: 'vlan {{ item.vlan_id }}'
-        ipv4: '{{ item.ip }}'
-      with_items: '{{l2_vni_svi_list }}'
+- name: Configuring L2 VNI SVIs with IP addresses
+  nxos_l3_interface:
+    name: 'vlan {{ item.vlan_id }}'
+    ipv4: '{{ item.ip }}'
+  with_items: '{{l2_vni_svi_list }}'
 
-    - name: Enabling Anycast Gateway on L2VNI SVIs
-      nxos_interface:
-        interface: 'vlan {{ item.vlan_id }}'
-        fabric_forwarding_anycast_gateway: yes
-      with_items: '{{ l2_vni_svi_list }}'
+- name: Enabling Anycast Gateway on L2VNI SVIs
+  nxos_interface:
+    interface: 'vlan {{ item.vlan_id }}'
+    fabric_forwarding_anycast_gateway: yes
+  with_items: '{{ l2_vni_svi_list }}'
 
-    - name: Configuring L3VNI SVI with 'ip forward'
-      nxos_interface:
-        interface: 'vlan {{ item.vlan_id }}'
-        ip_forward: enable
-      with_items: '{{ l3_vni_svi_list }}'
+- name: Configuring L3VNI SVI with 'ip forward'
+  nxos_interface:
+    interface: 'vlan {{ item.vlan_id }}'
+    ip_forward: enable
+  with_items: '{{ l3_vni_svi_list }}'
 
-    - name: Saving Configuration
-      nxos_config:
-        save_when: changed
+- name: Saving Configuration
+  nxos_config:
+    save_when: changed
