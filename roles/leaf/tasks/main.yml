@@ -10,7 +10,7 @@
 
 - name: Creating Loopback interfaces to be used as Router-ID and VTEP-ID
   nxos_interface:
-    name: loopback 0-1
+    name: loopback 0
     admin_state: up
   ignore_errors: yes
 
@@ -133,13 +133,13 @@
   nxos_interface:
     interface: nve1
     state: present
-    admin_state: up
+    admin_state: down
 
 - name: Configuring VXLAN Tunnel Interface for MP-BGP EVPN Control Plane
   nxos_vxlan_vtep:
     interface: nve1
     host_reachability: yes
-    source_interface: loopback1
+    source_interface: loopback0
 
 - name: Adding L2 VNIs to VXLAN Tunnel Interface
   nxos_vxlan_vtep_vni:
@@ -155,6 +155,12 @@
     vni: '{{ item.vni }}'
     assoc_vrf: yes
   with_items: '{{ tenant_a_l3_vni }}'
+
+- name: Creating Loopback interfaces to be used as Router-ID and VTEP-ID
+  nxos_interface:
+    name: nve1
+    admin_state: up
+  ignore_errors: yes
 
 - name: Configuring L2 VNIs for EVPN
   nxos_evpn_vni:
@@ -210,6 +216,6 @@
     ip_forward: enable
   with_items: '{{ l3_vni_svi_list }}'
 
-- name: Saving Configuration
-  nxos_config:
-    save_when: changed
+# - name: Saving Configuration
+#   nxos_config:
+#     save_when: changed
