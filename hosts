@@ -1,7 +1,11 @@
 [all:vars]
-ansible_connection = httpapi
-user = cisco
-pwd = cisco
+ansible_connection=ansible.netcommon.httpapi
+ansible_network_os=cisco.nxos.nxos
+ansible_httpapi_port=443
+ansible_httpapi_use_ssl=yes
+ansible_httpapi_validate_certs=no
+ansible_user=cisco
+ansible_password=cisco
 
 
 [spine]
