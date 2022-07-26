@@ -37,9 +37,9 @@
       - 'interface {{item.name}}'
   with_items: '{{ spine_facing_ifaces }}'
 
-- name: Creating OSPF Process 'UNDERLAY'
+- name: Creating OSPF Process 'OSPF_UNDERLAY_NET'
   nxos_ospf_vrf:
-    ospf: UNDERLAY
+    ospf: OSPF_UNDERLAY_NET
     router_id: '{{ router_id }}'
 
 - name: Configuring Spine Facing Interfaces as OSPF p2p interfaces
@@ -53,7 +53,7 @@
 - name: Assigning Interfaces to the OSPF Process
   nxos_interface_ospf:
     interface: '{{ item.name }}'
-    ospf: UNDERLAY
+    ospf: OSPF_UNDERLAY_NET
     area: '0'
   with_items:
     - '{{ spine_facing_ifaces }}'
