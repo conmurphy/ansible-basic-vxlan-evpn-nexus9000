@@ -1,27 +1,27 @@
-# - name: Enabling necessary features
-#   nxos_feature:
-#     feature: '{{ item.feature }}'
-#     state: '{{ item.state }}'
-#   with_items: '{{ vxlan_features }}'
+- name: Enabling necessary features
+  nxos_feature:
+    feature: '{{ item.feature }}'
+    state: '{{ item.state }}'
+  with_items: '{{ vxlan_features }}'
 
 - name: Enabling EVPN overlay
-  cisco.nxos.nxos_evpn_global:
+  nxos_evpn_global:
     nv_overlay_evpn: true
 
 - name: Creating Loopback interfaces to be used as PIM RP and Router-ID
-  cisco.nxos.nxos_interface:
+  nxos_interface:
     name: loopback 0-1
     admin_state: up
   ignore_errors: yes
 
 - name: Assigning IP Addresses to the Loopback interfaces
-  cisco.nxos.nxos_l3_interface:
+  nxos_l3_interface:
     name: '{{ item.name }}'
     ipv4: '{{ item.ipv4 }}'
   with_items: '{{ loopback_ip }}'
 
 - name: Configuring Leaf Facing Interfaces as L3 and with Jumbo MTU
-  cisco.nxos.nxos_interface:
+  nxos_interface:
     name: '{{item.name}}'
     mode: layer3
     mtu: '9216'
@@ -29,7 +29,7 @@
   with_items: '{{ leaf_facing_ifaces }}'
 
 - name: Configuring Leaf Facing interfaces with IP Unnumbered Parameters
-  cisco.nxos.nxos_config:
+  nxos_config:
     lines:
       - medium p2p
       - ip unnumbered loopback 0
@@ -38,12 +38,12 @@
   with_items: '{{ leaf_facing_ifaces }}'
 
 - name: Creating OSPF Process 'UNDERLAY'
-  cisco.nxos.nxos_ospf_vrf:
+  nxos_ospf_vrf:
     ospf: UNDERLAY
     router_id: '{{ router_id }}'
 
 - name: Configuring Leaf Facing Interfaces as OSPF p2p interfaces
-  cisco.nxos.nxos_config:
+  nxos_config:
     lines:
       - ip ospf network point-to-point
     parents:
@@ -51,7 +51,7 @@
   with_items: '{{ leaf_facing_ifaces }}'
 
 - name: Assigning Interfaces to the OSPF Process
-  cisco.nxos.nxos_interface_ospf:
+  nxos_interface_ospf:
     interface: '{{ item.name }}'
     ospf: UNDERLAY
     area: '0'
@@ -60,7 +60,7 @@
     - '{{ loopback_ifaces }}'
 
 - name: Configuring PIM RP Addresses
-  cisco.nxos.nxos_pim_rp_address:
+  nxos_pim_rp_address:
     rp_address: '{{ anycast_rp_address }}'
     state: present
 
@@ -71,7 +71,7 @@
       -  'ip pim anycast-rp {{ anycast_rp_address }} {{ spine2_loopback0 }}'
 
 - name: Configuring PIM Sparse Mode on L3 interfaces
-  cisco.nxos.nxos_pim_interface:
+  nxos_pim_interface:
     interface: '{{ item.name }}'
     sparse: yes
   with_items:
@@ -79,13 +79,13 @@
     -  '{{ loopback_ifaces }}'
 
 - name: Creating BGP Process
-  cisco.nxos.nxos_bgp:
+  nxos_bgp:
     asn: '65001'
     router_id: '{{ router_id }}'
     state: present
 
 - name: Configuring Leaves as BGP Neighbors
-  cisco.nxos.nxos_bgp_neighbor:
+  nxos_bgp_neighbor:
     asn: '64520'
     neighbor: '{{ item.neighbor }}'
     remote_as: '64520'
@@ -93,7 +93,7 @@
   with_items: '{{ bgp_leaf_neighbors }}'
 
 - name: Enabling L2VPN EVPN Address-Family Parameters For Leaf Neighbors
-  cisco.nxos.nxos_bgp_neighbor_af:
+  nxos_bgp_neighbor_af:
     asn: '64520'
     neighbor: '{{ item.neighbor }}'
     afi: l2vpn
@@ -103,7 +103,7 @@
   with_items: '{{ bgp_leaf_neighbors }}'
 
 - name: Enabling IPv4 Unicast Address-Family Parameters For Leaf Neighbors
-  cisco.nxos.nxos_bgp_neighbor_af:
+  nxos_bgp_neighbor_af:
     asn: '64520'
     neighbor: '{{ item.neighbor }}'
     afi: ipv4
@@ -113,6 +113,6 @@
     state: present
   with_items: '{{ bgp_leaf_neighbors }}'
 
-# - name: Saving running-configuration...
-#   cisco.nxos.nxos_config:
-#     save_when: changed
+- name: Saving running-configuration...
+  nxos_config:
+    save_when: changed
