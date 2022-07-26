@@ -103,7 +103,7 @@
     afi: ipv4
     safi: unicast
     send_community: both
-    route_reflector_client: yes
+    route_reflector_client: no
     state: present
   with_items: '{{ bgp_spine_neighbors }}'
 
@@ -169,13 +169,24 @@
     route_target_both: auto
   with_items: '{{ tenant_a_l2_vni }}'
 
-- name: Adding Tenant VRF Under BGP configuration
-  nxos_bgp_af:
-    asn: '64520'
-    vrf: '{{ item.name }}'
-    afi: '{{ item.afi }}'
-    safi: '{{ item.safi }}'
-  with_items: '{{ tenant_a_vrf_config }}'
+# - name: Adding Tenant VRF Under BGP configuration
+#   nxos_bgp_af:
+#     asn: '64520'
+#     vrf: '{{ item.name }}'
+#     afi: '{{ item.afi }}'
+#     safi: '{{ item.safi }}'
+#   with_items: '{{ tenant_a_vrf_config }}'
+
+- name: Adding BGP configuration
+  cisco.nxos.nxos_bgp_address_family:
+    config:
+      as_number: 64520
+      address_family:
+        - afi: ipv4
+          safi: unicast
+          vrf: tenant_a
+          networks: 
+            - prefix: 10.10.1.0/24
 
 - name: Configuring Distributed Anycast Gateway MAC Address on Leaves
   nxos_config:

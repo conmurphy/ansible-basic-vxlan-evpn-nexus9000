@@ -99,6 +99,7 @@
     afi: l2vpn
     safi: evpn
     send_community: both
+    route_reflector_client: yes
     state: present
   with_items: '{{ bgp_leaf_neighbors }}'
 
