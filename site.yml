@@ -8,7 +8,9 @@
   roles:
     - role: leaf
 
-#- hosts: all
+- hosts: all
+  collections:
+    - cisco.nxos
   #tasks:
   #  - name: save config
   #    nxos_save_config: host={{ inventory_hostname }}
