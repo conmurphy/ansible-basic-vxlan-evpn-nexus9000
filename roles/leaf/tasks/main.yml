@@ -186,7 +186,7 @@
           safi: unicast
           vrf: tenant_a
           networks: 
-            - prefix: 10.10.1.0/24
+            - prefix: 10.10.1.0/28
 
 - name: Configuring Distributed Anycast Gateway MAC Address on Leaves
   nxos_config:
