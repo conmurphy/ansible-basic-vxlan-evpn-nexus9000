@@ -80,7 +80,7 @@
 
 - name: Creating BGP Process
   nxos_bgp:
-    asn: '65001'
+    asn: '64520'
     router_id: '{{ router_id }}'
     state: present
 
@@ -113,6 +113,6 @@
     state: present
   with_items: '{{ bgp_leaf_neighbors }}'
 
-- name: Saving running-configuration...
-  nxos_config:
-    save_when: changed
+# - name: Saving running-configuration...
+#   nxos_config:
+#     save_when: changed
