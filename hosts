@@ -1,5 +1,5 @@
 [all:vars]
-ansible_connection = ansible.netcommon.httpapi
+ansible_connection = httpapi
 user = cisco
 pwd = cisco
 
