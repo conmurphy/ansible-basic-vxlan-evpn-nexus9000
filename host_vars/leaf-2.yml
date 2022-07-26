@@ -9,7 +9,6 @@ loopback_ip:
 # OSPF/BGP Router-ID
 router_id: 10.101.1.2
 
----
 vlans_unique:
   - vlan_id: 10
     admin_state: up
