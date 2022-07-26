@@ -1,8 +1,8 @@
-# - name: Enabling necessary features
-#   nxos_feature:
-#     feature: '{{ item.feature }}'
-#     state: '{{ item.state }}'
-#   with_items: '{{ vxlan_features }}'
+- name: Enabling necessary features
+  nxos_feature:
+    feature: '{{ item.feature }}'
+    state: '{{ item.state }}'
+  with_items: '{{ vxlan_features }}'
 
 - name: Enabling EVPN overlay
   nxos_evpn_global:
