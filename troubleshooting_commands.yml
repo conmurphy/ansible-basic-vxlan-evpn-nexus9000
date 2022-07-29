@@ -3,6 +3,10 @@
   - name: run show version on remote devices
     cisco.nxos.nxos_command:
       commands: show version
+      register: show_version
+  - name: "STDOUT - show version"
+    debug:
+    msg: "{{ show_version.stdout.split('\n') }}"
 
   - name: run show version and check to see if output contains Cisco
     cisco.nxos.nxos_command:
