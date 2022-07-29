@@ -3,7 +3,7 @@
   - name: run show version on remote devices
     cisco.nxos.nxos_command:
       commands: show version
-      register: show_version
+    register: show_version
 
   - name: "STDOUT - show version"
     debug:
