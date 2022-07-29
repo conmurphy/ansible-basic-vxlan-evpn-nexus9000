@@ -7,7 +7,7 @@
 
   - name: "STDOUT - show version"
     debug:
-      msg: "{{ show_version.stdout.split('\n') }}"
+      msg: "{{ show_version.stdout}}"
 
   - name: run show version and check to see if output contains Cisco
     cisco.nxos.nxos_command:
