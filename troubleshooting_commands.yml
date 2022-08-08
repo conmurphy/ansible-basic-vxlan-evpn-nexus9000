@@ -1,7 +1,7 @@
 - hosts: all
   vars:
     commands:
-      - "show version"
+      #- "show version"
       - "show ip route"
 
   tasks:
