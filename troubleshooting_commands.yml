@@ -10,6 +10,15 @@
       - command: show module
         tags: 
         - mgmt
+      - command: show interface brief
+        tags: 
+        - interface
+        - int
+      - command: show ip interface brief
+        tags: 
+        - interface
+        - int
+        - l3
       - command: show ip route
         tags: 
         - l3
@@ -31,25 +40,57 @@
       - command: show bgp l2vpn evpn
         tags: 
         - vxlan
+        - bgp
       - command: show bgp l2vpn evpn vni-id 100010
         tags: 
         - vxlan
+        - bgp
       - command: show bgp l2vpn evpn neighbor
         tags: 
         - vxlan
+        - bgp
       - command: show bgp l2vpn evpn neighbor 10.201.1.1 routes
         tags: 
         - vxlan
-
-      # - "show ip route bgp"
-      # - "show ip bgp"
-      # - "show nve peers"
-      # - "show bgp internal nve-peer-vni"
-      # - "show interface nve 1"
-      # - "show nve vxlan-params"
-      # - "show nve internal platform interface nve1 detail"
-      # - "show nve peer detail"
-      # - "show bgp internal evi 100010"
+        - bgp
+      - command: show bgp l2vpn evpn neighbor 10.201.1.1 routes
+        tags: 
+        - vxlan
+        - bgp
+      - command: show nve peers
+        tags: 
+        - vxlan
+        - nve
+      - command: show bgp internal nve-peer-vni
+        tags: 
+        - vxlan
+        - bgp
+        - nve
+      - command: interface nve 1
+        tags: 
+        - vxlan
+        - nve
+        - interface
+        - int
+      - command: show nve vxlan-params
+        tags: 
+        - vxlan
+        - nve
+      - command: show nve internal platform interface nve1 detail
+        tags: 
+        - vxlan
+        - nve
+        - interface
+        - int
+      - command: show nve peer detail
+        tags: 
+        - vxlan
+        - nve
+      - command: show bgp internal evi 100010
+        tags: 
+        - vxlan
+        - bgp
+        - evi
 
   tasks:
   - name: IF TAG PROVIDED - Run show commands based on tag
@@ -76,6 +117,7 @@
   - name:  STDOUT - Verificaiton Commands
     debug: 
       msg: "{{ item.stdout_lines[0] }}"
+    ignore_errors: yes
     with_items: "{{ echo.results }}"
     loop_control:
       label: "{{ item.item }}"
