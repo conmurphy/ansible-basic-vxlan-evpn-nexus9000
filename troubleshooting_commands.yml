@@ -1,8 +1,8 @@
 - hosts: all
   vars:
     commands:
-      - show version
-      - show ip route
+      - "show version"
+      - "show ip route"
 
   tasks:
   - name: run show version on remote devices
