@@ -11,15 +11,34 @@
       - command: show ip route
         tags: 
         - l3
-      #- "show version"
-      # - "show ip route"
-      # - "show vxlan"
-      # - "show l2route evpn mac evi 10"
-      # - "show l2route evpn mac-ip evi 10"
-      # - "show bgp l2vpn evpn"
-      # - "show bgp l2vpn evpn vni-id 100010"
-      # - "show bgp l2vpn evpn neighbor"
-      # - "show bgp l2vpn evpn nei 10.201.1.1 routes"
+        - routing
+      - command: show ip route bgp vrf tenant_a
+        tags: 
+        - l3
+        - routing
+        - bgp
+      - command: show vxlan
+        tags: 
+        - vxlan
+      - command: show l2route evpn mac evi 10
+        tags: 
+        - vxlan
+      - command: show l2route evpn mac-ip evi 10
+        tags: 
+        - vxlan
+      - command: show bgp l2vpn evpn
+        tags: 
+        - vxlan
+      - command: show bgp l2vpn evpn vni-id 100010
+        tags: 
+        - vxlan
+      - command: show bgp l2vpn evpn neighbor
+        tags: 
+        - vxlan
+      - command: show bgp l2vpn evpn neighbor 10.201.1.1 routes
+        tags: 
+        - vxlan
+
       # - "show ip route bgp"
       # - "show ip bgp"
       # - "show nve peers"
