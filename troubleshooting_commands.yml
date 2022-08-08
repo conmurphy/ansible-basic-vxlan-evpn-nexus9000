@@ -10,19 +10,16 @@
       - command: show module
         tags: 
         - mgmt
-      - command: show ip ospf neighbors 
-        tags: 
-        - underlay
-      - command: show ip route
-        tags: 
-        - underlay
-      - command: show ip route ospf-OSPF_UNDERLAY_NET 
-        tags: 
-        - underlay
       - command: show interface brief
         tags: 
         - underlay
       - command: show ip interface brief
+        tags: 
+        - underlay
+      - command: show ip ospf neighbors 
+        tags: 
+        - underlay
+      - command: show ip route ospf-OSPF_UNDERLAY_NET 
         tags: 
         - underlay
       - command: show ip pim interface brief 
@@ -41,9 +38,6 @@
         tags: 
         - control
       - command: show ip arp suppression-cache detail
-        tags: 
-        - control
-      - command: show bgp l2vpn evpn neighbor 10.201.1.1 routes
         tags: 
         - control
       - command: show vxlan
