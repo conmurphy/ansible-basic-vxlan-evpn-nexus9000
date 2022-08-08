@@ -36,7 +36,7 @@
       commands: "{{ commands | json_query(query) }}"
     vars:
       query: "[?tags.contains(@, '{{ filter_tag }}')].command"
-    when: filter_tag != None
+    #when: filter_tag != None
 
   - name: commands
     debug:
