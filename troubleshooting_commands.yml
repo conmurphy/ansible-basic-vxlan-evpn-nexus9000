@@ -1,4 +1,6 @@
 - hosts: all
+  gather_facts: False
+  strategy: free
   vars:
     tag: ""
     commands:
