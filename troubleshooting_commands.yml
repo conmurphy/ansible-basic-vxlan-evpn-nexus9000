@@ -7,7 +7,9 @@
       - command: show module
         tags: mgmt
       - command: show ip route
-        tags: l3
+        tags: 
+        - l3
+        - mgmt
       #- "show version"
       # - "show ip route"
       # - "show vxlan"
