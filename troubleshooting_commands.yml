@@ -1,6 +1,6 @@
 - hosts: all
   vars:
-    filter_tags: null
+    filter_tag: null
     commands:
       - command: show version
         tags: mgmt
@@ -9,7 +9,6 @@
       - command: show ip route
         tags: 
         - l3
-        - mgmt
       #- "show version"
       # - "show ip route"
       # - "show vxlan"
@@ -34,8 +33,7 @@
     set_fact:
       commands: "{{ commands | json_query(query) }}"
     vars:
-      #query: "[?tags.contains(@, '{{ filter_tags }}')].command"
-      query: "[?tags.contains(@, ['mgmt','l3'])].command"
+      query: "[?tags.contains(@, '{{ filter_tag }}')].command"
 
   - name: Run show commands on remote devices
     cisco.nxos.nxos_command:
