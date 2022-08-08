@@ -11,7 +11,7 @@
     register: echo
     with_items: "{{ commands }}"
 
-  - name:  STDOUT - show version
-    debug:
-      msg: "{{ item.stdout}}"
-    loop: "{{ echo.results }}"
+  # - name:  STDOUT - show version
+  #   debug:
+  #     msg: "{{ item.stdout}}"
+  #   loop: "{{ echo.results }}"
