@@ -13,7 +13,7 @@
 
   - name:  STDOUT - show version
     debug: 
-      msg: "{{ item.stdout_lines }} \n {{ item }}"
+      msg: "{{ item.stdout_lines[0] }}"
     with_items: "{{ echo.results }}"
     loop_control:
       label: "{{ item.item }}"
