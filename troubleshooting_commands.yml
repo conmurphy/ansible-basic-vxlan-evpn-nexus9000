@@ -16,4 +16,4 @@
       msg: " {{ item.stdout }}"
     with_items: "{{ echo.results }}"
     loop_control:
-      label: "{{ item }}"
+      label: "{{ item.item }}"
