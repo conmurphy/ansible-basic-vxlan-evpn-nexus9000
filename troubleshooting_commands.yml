@@ -3,6 +3,24 @@
     commands:
       #- "show version"
       - "show ip route"
+      - "show vxlan"
+      - "show l2route evpn mac evi 10"
+      - "show l2route evpn mac-ip evi 10"
+      - "show bgp l2vpn evpn"
+      - "show bgp l2vpn evpn vni-id 100010"
+      - "show bgp l2vpn evpn neighbor"
+      - "show bgp l2vpn evpn nei 10.200.1.1 routes"
+      - "show ip route bgp"
+      - "show ip bgp"
+      - "show nve peers"
+      - "show bgp internal nve-peer-vni"
+      - "show interface nve 1"
+      - "show nve vxlan-params"
+      - "show nve internal platform interface nve1 detail"
+      - "show nve peer detail"
+      - "show bgp internal evi 100010"
+
+
 
   tasks:
   - name: run show version on remote devices
@@ -11,7 +29,7 @@
     register: echo
     with_items: "{{ commands }}"
 
-  - name:  STDOUT - show version
+  - name:  STDOUT - Verificaiton Commands
     debug: 
       msg: "{{ item.stdout_lines[0] }}"
     with_items: "{{ echo.results }}"
