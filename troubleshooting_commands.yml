@@ -36,14 +36,14 @@
       commands: "{{ commands | json_query(query) }}"
     vars:
       query: "[?tags.contains(@, '{{ filter_tag }}')].command"
-    when: filter_tag != None
+    when: filter_tag != ""
   
   - name: Return all show commands if non filter specified
     set_fact:
       commands: "{{ commands | json_query(query) }}"
     vars:
       query: "[].command"
-    when: filter_tag == None
+    when: filter_tag == ""
 
   - name: Run show commands on remote devices
     cisco.nxos.nxos_command:
