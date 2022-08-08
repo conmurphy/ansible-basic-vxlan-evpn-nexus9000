@@ -18,4 +18,3 @@ vlans_unique:
 host_facing_ifaces:
   - name: Ethernet1/3
     vlan_id: 10
-    enabled: true

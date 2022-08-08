@@ -25,7 +25,6 @@
     config: 
       - name: '{{item.name}}'
         mode: access
-        enabled: '{{item.enabled}}'
   with_items: '{{ host_facing_ifaces }}'
 
 - name: Configuring Host Facing Interfaces as L2 
