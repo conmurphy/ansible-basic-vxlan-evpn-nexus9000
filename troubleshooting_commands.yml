@@ -12,6 +12,6 @@
     with_items: "{{ commands }}"
 
   - name:  STDOUT - show version
-    loop: "{{ echo.results }}"
+    with_items: "{{ echo.results }}"
     loop_control:
       label: "{{ item.stdout }}"
