@@ -1,6 +1,6 @@
 - hosts: all
   vars:
-    filter_tag: ""
+    tag: ""
     commands:
       - command: show version
         tags: 
@@ -31,19 +31,19 @@
       # - "show bgp internal evi 100010"
 
   tasks:
-  - name: Filter show commands based on a tag
+  - name: IF TAG PROVIDED - Run show commands based on tag
     set_fact:
       commands: "{{ commands | json_query(query) }}"
     vars:
-      query: "[?tags.contains(@, '{{ filter_tag }}')].command"
-    when: filter_tag != ""
+      query: "[?tags.contains(@, '{{ tag }}')].command"
+    when: tag != ""
   
-  - name: Return all show commands if non filter specified
+  - name: IF NO TAG PROVIDED - Run all show commands
     set_fact:
       commands: "{{ commands | json_query(query) }}"
     vars:
       query: "[].command"
-    when: filter_tag == ""
+    when: tag == ""
 
   - name: Run show commands on remote devices
     cisco.nxos.nxos_command:
