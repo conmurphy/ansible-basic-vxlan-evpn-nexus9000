@@ -1,11 +1,12 @@
 - hosts: all
   vars:
-    filter_tag: null
     commands:
       - command: show version
-        tags: mgmt
+        tags: 
+        - mgmt
       - command: show module
-        tags: mgmt
+        tags: 
+        - mgmt
       - command: show ip route
         tags: 
         - l3
@@ -34,6 +35,7 @@
       commands: "{{ commands | json_query(query) }}"
     vars:
       query: "[?tags.contains(@, '{{ filter_tag }}')].command"
+    when: filter_tag != None
 
   - name: Run show commands on remote devices
     cisco.nxos.nxos_command:
