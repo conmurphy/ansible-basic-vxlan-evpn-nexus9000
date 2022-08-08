@@ -2,8 +2,8 @@
   vars:
     filter_tags: null
     commands:
-      - command: show ip route
-        tags: l3
+      - command: show version
+        tags: mgmt
       - command: show ip route
         tags: l3
       #- "show version"
@@ -26,6 +26,13 @@
       # - "show bgp internal evi 100010"
 
   tasks:
+  - name: install packages
+    package:
+      name: "{{ item.name }}"
+      state: "{{ item.state|default('present') }}"
+      state: present
+    loop: "{{ packages_needed_by_this_role }}"
+    tags: manage_packages
   - name: Filter show commands
     set_fact:
       commands: "{{ commands | json_query(query) }}"
