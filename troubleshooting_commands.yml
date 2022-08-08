@@ -30,11 +30,13 @@
       # - "show bgp internal evi 100010"
 
   tasks:
-  - name: Filter show commands
+  - name: Filter show commands based on a tag
     set_fact:
       commands: "{{ commands | json_query(query) }}"
     vars:
-      query: "[?tags.contains(@, '{{ filter_tags }}')].command"
+      #query: "[?tags.contains(@, '{{ filter_tags }}')].command"
+      query: "[?tags.contains(@, ["mgmt","l3"])].command"
+
   - name: Run show commands on remote devices
     cisco.nxos.nxos_command:
       commands: "{{ item }}"
