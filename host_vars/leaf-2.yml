@@ -16,3 +16,12 @@ vlans_unique:
   - vlan_id: 20
     admin_state: up
     name: VLAN20
+
+# Host facing interfaces
+host_facing_ifaces:
+  - name: Ethernet1/3
+    vlan_id: 10
+    enabled: true
+  - name: Ethernet1/4
+    vlan_id: 20
+    enabled: true
