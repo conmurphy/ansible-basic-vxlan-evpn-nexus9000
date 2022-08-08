@@ -10,87 +10,75 @@
       - command: show module
         tags: 
         - mgmt
-      - command: show interface brief
+      - command: show ip ospf neighbors 
         tags: 
-        - interface
-        - int
-      - command: show ip interface brief
-        tags: 
-        - interface
-        - int
-        - l3
+        - underlay
       - command: show ip route
         tags: 
-        - l3
-        - routing
-      - command: show ip route bgp vrf tenant_a
+        - underlay
+      - command: show ip route ospf-OSPF_UNDERLAY_NET 
         tags: 
-        - l3
-        - routing
-        - bgp
+        - underlay
+      - command: show interface brief
+        tags: 
+        - underlay
+      - command: show ip interface brief
+        tags: 
+        - underlay
+      - command: show ip pim interface brief 
+        tags: 
+        - multicast
+      - command: show ip pim rp 
+        tags: 
+        - multicast
+      - command: show ip bgp neighbors
+        tags: 
+        - control
+      - command: show bgp l2vpn evpn summary 
+        tags: 
+        - control
+      - command: show fabric forwarding internal topo-info
+        tags: 
+        - control
+      - command: show ip arp suppression-cache detail
+        tags: 
+        - control
+      - command: show bgp l2vpn evpn neighbor 10.201.1.1 routes
+        tags: 
+        - control
       - command: show vxlan
         tags: 
-        - vxlan
-      - command: show l2route evpn mac evi 10
+        - overlay
+      - command: show vxlan interface
         tags: 
-        - vxlan
-      - command: show l2route evpn mac-ip evi 10
-        tags: 
-        - vxlan
-      - command: show bgp l2vpn evpn
-        tags: 
-        - vxlan
-        - bgp
-      - command: show bgp l2vpn evpn vni-id 100010
-        tags: 
-        - vxlan
-        - bgp
-      - command: show bgp l2vpn evpn neighbor
-        tags: 
-        - vxlan
-        - bgp
-      - command: show bgp l2vpn evpn neighbor 10.201.1.1 routes
-        tags: 
-        - vxlan
-        - bgp
-      - command: show bgp l2vpn evpn neighbor 10.201.1.1 routes
-        tags: 
-        - vxlan
-        - bgp
+        - overlay
       - command: show nve peers
         tags: 
-        - vxlan
-        - nve
-      - command: show bgp internal nve-peer-vni
+        - overlay
+      - command: show mac address-table vni 100010
         tags: 
-        - vxlan
-        - bgp
-        - nve
-      - command: interface nve 1
+        - l2vni
+      - command: show bgp l2vpn evpn vni-id 100010
         tags: 
-        - vxlan
-        - nve
-        - interface
-        - int
-      - command: show nve vxlan-params
+        - l2vni
+      - command: show l2route evpn mac evi 10
         tags: 
-        - vxlan
-        - nve
-      - command: show nve internal platform interface nve1 detail
+        - l2vni
+      - command: show l2route evpn mac-ip evi 10
         tags: 
-        - vxlan
-        - nve
-        - interface
-        - int
-      - command: show nve peer detail
+        - l2vni
+      - command: show bgp l2vpn evpn vni-id 100999
         tags: 
-        - vxlan
-        - nve
-      - command: show bgp internal evi 100010
+        - l3vni
+      - command: show l2route evpn mac evi 999
         tags: 
-        - vxlan
-        - bgp
-        - evi
+        - l3vni
+      - command: show ip route bgp vrf tenant_a
+        tags: 
+        - l3vni
+      - command: show bgp l2vpn evpn neighbor 10.201.1.1 routes
+        tags: 
+        - l3vni
 
   tasks:
   - name: IF TAG PROVIDED - Run show commands based on tag
