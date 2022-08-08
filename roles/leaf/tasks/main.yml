@@ -24,7 +24,7 @@
   nxos_l2_interfaces:
     config: 
       - name: '{{item.name}}'
-        mode: layer2
+        mode: access
         enabled: '{{item.enabled}}'
   with_items: '{{ host_facing_ifaces }}'
 
