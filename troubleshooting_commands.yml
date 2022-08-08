@@ -12,6 +12,7 @@
     with_items: "{{ commands }}"
 
   - name:  STDOUT - show version
-    # debug:
-    #   msg: "{{ item.stdout}}"
+    debug:
+      msg: "{{ item.stdout}}"
+    no_log: True
     loop: "{{ echo.results }}"
