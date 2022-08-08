@@ -4,6 +4,8 @@
     commands:
       - command: show version
         tags: mgmt
+      - command: show module
+        tags: mgmt
       - command: show ip route
         tags: l3
       #- "show version"
