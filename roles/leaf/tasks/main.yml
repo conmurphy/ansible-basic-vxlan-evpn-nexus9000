@@ -31,9 +31,9 @@
 - name: Configuring Host Facing Interfaces as L2 
   nxos_l2_interfaces:
     config: 
-    - name: '{{item.name}}'
-      access: 
-        vlan: '{{item.vlan_id}}'
+      - name: '{{item.name}}'
+        access: 
+          vlan: '{{item.vlan_id}}'
   with_items: '{{ host_facing_ifaces }}'
 
 - name: Configuring Spine Facing Interfaces as L3 and with Jumbo MTU
