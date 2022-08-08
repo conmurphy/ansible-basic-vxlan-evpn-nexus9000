@@ -9,7 +9,7 @@
     cisco.nxos.nxos_command:
       commands: "echo {{ item }}"
     register: echo
-    with_items: "{{commands}}""
+    with_items: "{{commands}}"
 
   - name:  STDOUT - show version
     debug:
