@@ -38,6 +38,10 @@
       query: "[?tags.contains(@, '{{ filter_tag }}')].command"
     when: filter_tag != None
 
+  - name:  commands
+    debug: 
+      msg: "{{ commands }}"
+
   - name: Run show commands on remote devices
     cisco.nxos.nxos_command:
       commands: "{{ item }}"
