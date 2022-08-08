@@ -14,5 +14,5 @@
   - name:  STDOUT - show version
     debug:
       msg: "{{ item.stdout}}"
-    no_log: True
+    #no_log: True
     loop: "{{ echo.results }}"
