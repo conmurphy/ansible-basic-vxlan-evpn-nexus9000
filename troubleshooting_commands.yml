@@ -14,5 +14,6 @@
   - name:  STDOUT - show version
     # debug:
     #   msg: "{{ item.stdout}}"
+    loop: "{{ echo.results }}"
     loop_control:
-      label: "{{ echo.results }}"
+      label: "{{ item.stdout }}"
