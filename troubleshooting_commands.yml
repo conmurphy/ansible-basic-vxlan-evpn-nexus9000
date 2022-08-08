@@ -1,6 +1,5 @@
 - hosts: all
   vars:
-    filter_tag: "a"
     commands:
       - command: show version
         tags: 
