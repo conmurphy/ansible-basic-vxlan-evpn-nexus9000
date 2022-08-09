@@ -16,7 +16,7 @@
     - name: Configuring Distributed Anycast Gateway MAC Address on Leaves
       nxos_config:
         lines:
-          - no fabric forwarding anycast-gateway-mac 0000.0000.000A
+          - no fabric forwarding anycast-gateway-mac
     
     - name: Delete Tenant VRF
       nxos_vrf:
