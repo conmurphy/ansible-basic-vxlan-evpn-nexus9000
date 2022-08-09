@@ -47,8 +47,27 @@
         state: deleted 
       with_items: 
         - '{{ fabric_ifaces }}'
+      when: fabric_ifaces is defined
+      ignore_errors: yes
+    
+    - name: Delete interface config
+      cisco.nxos.nxos_interfaces:
+        config:
+          - name: '{{item.name}}'
+        state: deleted 
+      with_items: 
         - '{{ host_facing_ifaces }}'
+      when: host_facing_ifaces is defined
+      ignore_errors: yes
+
+    - name: Delete interface config
+      cisco.nxos.nxos_interfaces:
+        config:
+          - name: '{{item.name}}'
+        state: deleted 
+      with_items: 
         - '{{ loopback_ifaces }}'
+      when: loopback_ifaces is defined
       ignore_errors: yes
 
     - name: Delete VLANs
@@ -58,6 +77,7 @@
             name: '{{ item.name }}'
         state: deleted
       with_items: '{{ tenant_a_vlan_to_vni }}'
+      when: tenant_a_vlan_to_vni is defined
       ignore_errors: yes
 
     # - name: Saving Configuration
