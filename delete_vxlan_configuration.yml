@@ -3,6 +3,13 @@
   strategy: free
 
   tasks: 
+      # Needed to add this before disabling the feature
+      # otherwise it's not cleaned up correctly
+    - name: Configuring Distributed Anycast Gateway MAC Address on Leaves
+      nxos_config:
+        lines:
+          - no fabric forwarding anycast-gateway-mac 
+
     - name: Disable features which removes config
       cisco.nxos.nxos_feature:
         feature: '{{ item.feature }}'
@@ -12,11 +19,6 @@
     - name: Disable EVPN overlay
       nxos_evpn_global:
         nv_overlay_evpn: false
-
-    - name: Configuring Distributed Anycast Gateway MAC Address on Leaves
-      nxos_config:
-        lines:
-          - no fabric forwarding anycast-gateway-mac
     
     - name: Delete Tenant VRF
       nxos_vrf:
