@@ -3,12 +3,20 @@
   strategy: free
 
   tasks: 
-      # Needed to add this before disabling the feature
+      # Needed to add this before disabling the fabric forwarding feature
       # otherwise it's not cleaned up correctly
     - name: Remove Distributed Anycast Gateway MAC Address on Leaves
       nxos_config:
         lines:
           - no fabric forwarding anycast-gateway-mac 
+
+    # Needed to add this as the loopback interfaces were not being deleted 
+    # and I don't have time to troubleshoot
+    - name: Delete Loopback Interfaces
+      nxos_config:
+        lines:
+          - no interface loopback 0 
+          - no interface loopback 1
 
     - name: Disable features which removes config
       cisco.nxos.nxos_feature:
