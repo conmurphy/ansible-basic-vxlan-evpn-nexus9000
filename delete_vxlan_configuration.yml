@@ -2,39 +2,39 @@
   gather_facts: False
   strategy: free
 
-tasks: 
-  - name: Disable features which removes config
-    cisco.nxos.nxos_feature:
-      feature: '{{ item.feature }}'
-      state: disabled
-    with_items: '{{ vxlan_features }}'
+  tasks: 
+    - name: Disable features which removes config
+      cisco.nxos.nxos_feature:
+        feature: '{{ item.feature }}'
+        state: disabled
+      with_items: '{{ vxlan_features }}'
 
-  - name: Delete loopbacks
-    cisco.nxos.nxos_interfaces:
-      config:
-        - name: loopback 0
-        - name: loopback 1
-      state: deleted
-    ignore_errors: yes
+    - name: Delete loopbacks
+      cisco.nxos.nxos_interfaces:
+        config:
+          - name: loopback 0
+          - name: loopback 1
+        state: deleted
+      ignore_errors: yes
 
-  - name: Delete interface config
-    cisco.nxos.nxos_interfaces:
-      config:
-        - name: '{{item.name}}'
-      state: deleted 
-    with_items: 
-      - '{{ spine_facing_ifaces }}'
-      - '{{ spine_facing_ifaces }}'
-      - '{{ host_facing_ifaces }}'
+    - name: Delete interface config
+      cisco.nxos.nxos_interfaces:
+        config:
+          - name: '{{item.name}}'
+        state: deleted 
+      with_items: 
+        - '{{ spine_facing_ifaces }}'
+        - '{{ spine_facing_ifaces }}'
+        - '{{ host_facing_ifaces }}'
 
-  - name: Delete VLANs
-    cisco.nxos.nxos_vlans:
-      config:
-        - vlan_id: '{{ item.vlan_id }}'
-          name: '{{ item.name }}'
-      state: deleted
-    with_items: '{{ tenant_a_vlan_to_vni }}'
+    - name: Delete VLANs
+      cisco.nxos.nxos_vlans:
+        config:
+          - vlan_id: '{{ item.vlan_id }}'
+            name: '{{ item.name }}'
+        state: deleted
+      with_items: '{{ tenant_a_vlan_to_vni }}'
 
-  # - name: Saving Configuration
-  #   nxos_config:
-  #     save_when: changed
+    # - name: Saving Configuration
+    #   nxos_config:
+    #     save_when: changed
