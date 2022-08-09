@@ -9,7 +9,7 @@
       nxos_config:
         lines:
           - no fabric forwarding anycast-gateway-mac 
-
+      ignore_errors: yes
     # Needed to add this as the loopback interfaces were not being deleted 
     # and I don't have time to troubleshoot
     - name: Delete Loopback Interfaces
@@ -17,22 +17,26 @@
         lines:
           - no interface loopback 0 
           - no interface loopback 1
+      ignore_errors: yes
 
     - name: Disable features which removes config
       cisco.nxos.nxos_feature:
         feature: '{{ item.feature }}'
         state: disabled
       with_items: '{{ vxlan_features }}'
-    
+      ignore_errors: yes
+
     - name: Disable EVPN overlay
       nxos_evpn_global:
         nv_overlay_evpn: false
-    
+      ignore_errors: yes
+
     - name: Delete Tenant VRF
       nxos_vrf:
         name: '{{ item.name }}'
         state: absent
       with_items: '{{ tenant_a_vrf_config }}'
+      ignore_errors: yes
 
     - name: Delete interface config
       cisco.nxos.nxos_interfaces:
@@ -43,6 +47,7 @@
         - '{{ fabric_ifaces }}'
         - '{{ host_facing_ifaces }}'
         - '{{ loopback_ifaces }}'
+      ignore_errors: yes
 
     - name: Delete VLANs
       cisco.nxos.nxos_vlans:
@@ -51,7 +56,8 @@
             name: '{{ item.name }}'
         state: deleted
       with_items: '{{ tenant_a_vlan_to_vni }}'
-
+      ignore_errors: yes
+      
     # - name: Saving Configuration
     #   nxos_config:
     #     save_when: changed
