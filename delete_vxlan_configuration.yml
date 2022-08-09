@@ -1,5 +1,5 @@
 - hosts: all
-  gather_facts: False
+  gather_facts: True
   strategy: free
 
   tasks: 
@@ -10,6 +10,7 @@
         lines:
           - no fabric forwarding anycast-gateway-mac 
       ignore_errors: yes
+      
     # Needed to add this as the loopback interfaces were not being deleted 
     # and I don't have time to troubleshoot
     - name: Delete Loopback Interfaces
@@ -36,6 +37,7 @@
         name: '{{ item.name }}'
         state: absent
       with_items: '{{ tenant_a_vrf_config }}'
+      when: tenant_a_vrf_config is defined
       ignore_errors: yes
 
     - name: Delete interface config
@@ -57,7 +59,7 @@
         state: deleted
       with_items: '{{ tenant_a_vlan_to_vni }}'
       ignore_errors: yes
-      
+
     # - name: Saving Configuration
     #   nxos_config:
     #     save_when: changed
