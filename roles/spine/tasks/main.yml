@@ -45,8 +45,8 @@
   cisco.nxos.nxos_ospfv3:
     config:
       processes:
-        - process_id: "OSPF_UNDERLAY_NET"
-          router_id: '{{ router_id }}'
+        - process_id: OSPF_UNDERLAY_NET
+          router_id: 1.1.1.1 #'{{ router_id }}'
 
 - name: Configuring Leaf Facing Interfaces as OSPF p2p interfaces
   nxos_config:
