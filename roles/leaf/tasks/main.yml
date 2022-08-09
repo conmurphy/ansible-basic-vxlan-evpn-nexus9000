@@ -73,10 +73,15 @@
   with_items: '{{ spine_facing_ifaces }}'
 
 - name: Assigning Interfaces to the OSPF Process
-  nxos_interface_ospf:
-    interface: '{{ item.name }}'
-    ospf: OSPF_UNDERLAY_NET
-    area: '0'
+  nxos_ospf_interfaces:
+    config:
+      - name: '{{ item.name }}'
+        address_family: 
+          - afi: ipv4
+            processes: 
+              - process_id: OSPF_UNDERLAY_NET
+                area:
+                  area_id: 0
   with_items:
     - '{{ spine_facing_ifaces }}'
     - '{{ loopback_ifaces }}'
