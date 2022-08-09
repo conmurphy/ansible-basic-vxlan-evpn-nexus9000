@@ -5,7 +5,7 @@
   tasks: 
       # Needed to add this before disabling the feature
       # otherwise it's not cleaned up correctly
-    - name: Configuring Distributed Anycast Gateway MAC Address on Leaves
+    - name: Remove Distributed Anycast Gateway MAC Address on Leaves
       nxos_config:
         lines:
           - no fabric forwarding anycast-gateway-mac 
@@ -23,7 +23,7 @@
     - name: Delete Tenant VRF
       nxos_vrf:
         name: '{{ item.name }}'
-        state: deleted
+        state: absent
       with_items: '{{ tenant_a_vrf_config }}'
 
     - name: Configuring Host Facing Interfaces as L2 
