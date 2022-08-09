@@ -73,7 +73,7 @@
   with_items: '{{ spine_facing_ifaces }}'
 
 - name: Assigning Interfaces to the OSPF Process
-  nxos_ospf_interfaces:
+  cisco.nxos.nxos_ospf_interfaces:
     config:
       - name: '{{ item.name }}'
         address_family: 
