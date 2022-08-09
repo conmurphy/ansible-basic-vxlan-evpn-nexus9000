@@ -100,10 +100,10 @@
     -  '{{ loopback_ifaces }}'
 
 - name: Creating BGP Process
-  nxos_bgp:
-    asn: '64520'
-    router_id: '{{ router_id }}'
-    state: present
+  cisco.nxos.nxos_bgp_global:
+    config:
+      as_number: 64520
+      router_id: '{{ router_id }}'
 
 - name: Configuring Spines as BGP Neighbors
   nxos_bgp_neighbor:
