@@ -94,13 +94,10 @@
     config:
       as_number: 64520
       router_id: '{{ router_id }}'
-
-- name: Configuring Leaves as BGP Neighbors
-  nxos_bgp_neighbor:
-    asn: '64520'
-    neighbor: '{{ item.neighbor }}'
-    remote_as: '64520'
-    update_source: Loopback0
+      neighbors:
+        - neighbor_address: '{{ item.neighbor }}'
+          remote_as: 64520
+          update_source: Loopback0
   with_items: '{{ bgp_leaf_neighbors }}'
 
 - name: Enabling L2VPN EVPN Address-Family Parameters For Leaf Neighbors
