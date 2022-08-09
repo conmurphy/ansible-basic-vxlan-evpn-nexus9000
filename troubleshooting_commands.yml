@@ -75,31 +75,31 @@
         - l3vni
 
   tasks:
-  - name: IF TAG PROVIDED - Run show commands based on tag
-    set_fact:
-      commands: "{{ commands | json_query(query) }}"
-    vars:
-      query: "[?tags.contains(@, '{{ tag }}')].command"
-    when: tag != ""
-  
-  - name: IF NO TAG PROVIDED - Run all show commands
-    set_fact:
-      commands: "{{ commands | json_query(query) }}"
-    vars:
-      query: "[].command"
-    when: tag == ""
+    - name: IF TAG PROVIDED - Run show commands based on tag
+      set_fact:
+        commands: "{{ commands | json_query(query) }}"
+      vars:
+        query: "[?tags.contains(@, '{{ tag }}')].command"
+      when: tag != ""
+    
+    - name: IF NO TAG PROVIDED - Run all show commands
+      set_fact:
+        commands: "{{ commands | json_query(query) }}"
+      vars:
+        query: "[].command"
+      when: tag == ""
 
-  - name: Run show commands on remote devices
-    cisco.nxos.nxos_command:
-      commands: "{{ item }}"
-    ignore_errors: yes
-    register: echo
-    with_items: "{{ commands }}"
+    - name: Run show commands on remote devices
+      cisco.nxos.nxos_command:
+        commands: "{{ item }}"
+      ignore_errors: yes
+      register: echo
+      with_items: "{{ commands }}"
 
-  - name:  STDOUT - Verificaiton Commands
-    debug: 
-      msg: "{{ item.stdout_lines[0] }}"
-    ignore_errors: yes
-    with_items: "{{ echo.results }}"
-    loop_control:
-      label: "{{ item.item }}"
+    - name:  STDOUT - Verificaiton Commands
+      debug: 
+        msg: "{{ item.stdout_lines[0] }}"
+      ignore_errors: yes
+      with_items: "{{ echo.results }}"
+      loop_control:
+        label: "{{ item.item }}"
