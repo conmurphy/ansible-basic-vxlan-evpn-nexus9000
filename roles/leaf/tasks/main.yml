@@ -130,10 +130,11 @@
   with_items: '{{ bgp_spine_neighbors }}'
 
 - name: Creating VLANs and Mapping Them to VXLAN VNIs
-  nxos_vlan:
-    vlan_id: '{{ item.vlan_id }}'
-    name: '{{ item.name }}'
-    mapped_vni: '{{ item.mapped_vni }}'
+  cisco.nxos.nxos_vlans:
+    config:
+      vlan_id: '{{ item.vlan_id }}'
+      name: '{{ item.name }}'
+      mapped_vni: '{{ item.mapped_vni }}'
   with_items: '{{ tenant_a_vlan_to_vni }}'
 
 - name: Creating Tenant VRF and Mapping it to L3VNI
