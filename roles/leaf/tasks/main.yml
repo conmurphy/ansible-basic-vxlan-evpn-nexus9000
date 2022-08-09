@@ -58,9 +58,10 @@
   with_items: '{{ spine_facing_ifaces }}'
 
 - name: Creating OSPF Process 'OSPF_UNDERLAY_NET'
-  nxos_ospf_vrf:
-    ospf: OSPF_UNDERLAY_NET
-    router_id: '{{ router_id }}'
+  nxos_ospfv3:
+    config:
+      - process_id: OSPF_UNDERLAY_NET
+        router_id: '{{ router_id }}'
 
 - name: Configuring Spine Facing Interfaces as OSPF p2p interfaces
   nxos_config:
@@ -180,7 +181,7 @@
   nxos_interfaces:
     config:
       - name: nve1
-        enabled: up
+        enabled: yes
   ignore_errors: yes
 
 - name: Configuring L2 VNIs for EVPN
