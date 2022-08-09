@@ -111,24 +111,22 @@
   with_items: '{{ bgp_spine_neighbors }}'
 
 - name: Enabling L2VPN EVPN Address-Family Parameters For Spine Neighbors
-  nxos_bgp_neighbor_af:
-    asn: '64520'
-    neighbor: '{{ item.neighbor }}'
-    afi: l2vpn
-    safi: evpn
-    send_community: both
-    state: present
-  with_items: '{{ bgp_spine_neighbors }}'
-
-- name: Enabling IPv4 Unicast Address-Family Parameters For Spine Neighbors
-  nxos_bgp_neighbor_af:
-    asn: '64520'
-    neighbor: '{{ item.neighbor }}'
-    afi: ipv4
-    safi: unicast
-    send_community: both
-    route_reflector_client: no
-    state: present
+  cisco.nxos.nxos_bgp_neighbor_address_family:
+    config: 
+      as_number: '64520'
+      neighbors:
+        - neighbor_address: '{{ item.neighbor }}'
+          address_family:
+            - afi: l2vpn
+              safi: evpn
+              send_community:
+                both: yes
+              route_reflector_client: no
+            - afi: ipv4
+              safi: unicast
+              send_community:
+                both: yes
+              route_reflector_client: no
   with_items: '{{ bgp_spine_neighbors }}'
 
 - name: Creating VLANs and Mapping Them to VXLAN VNIs
