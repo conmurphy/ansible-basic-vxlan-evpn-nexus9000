@@ -35,7 +35,7 @@ anycast_rp_address: 1.2.3.4
 
 # BGP Configuration variables
 
-bgp_leaf_neighbors:
+bgp_neighbors:
   - neighbor: '10.101.1.1'
   - neighbor: '10.101.1.2'
 

@@ -38,7 +38,7 @@ rp_address: 1.2.3.4
 
 # BGP Configuration variables
 
-bgp_spine_neighbors:
+bgp_neighbors:
   - neighbor: '10.201.1.1'
   - neighbor: '10.201.1.2'
 

@@ -108,7 +108,7 @@
         - neighbor_address: '{{ item.neighbor }}'
           remote_as: 64520
           update_source: Loopback0
-  with_items: '{{ bgp_spine_neighbors }}'
+  with_items: '{{ bgp_neighbors }}'
 
 - name: Enabling L2VPN EVPN Address-Family Parameters For Spine Neighbors
   cisco.nxos.nxos_bgp_neighbor_address_family:
@@ -127,7 +127,7 @@
               send_community:
                 both: yes
               route_reflector_client: no
-  with_items: '{{ bgp_spine_neighbors }}'
+  with_items: '{{ bgp_neighbors }}'
 
 - name: Creating VLANs and Mapping Them to VXLAN VNIs
   cisco.nxos.nxos_vlans:

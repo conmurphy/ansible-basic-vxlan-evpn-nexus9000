@@ -98,7 +98,7 @@
         - neighbor_address: '{{ item.neighbor }}'
           remote_as: 64520
           update_source: Loopback0
-  with_items: '{{ bgp_leaf_neighbors }}'
+  with_items: '{{ bgp_neighbors }}'
 
 - name: Enabling L2VPN EVPN Address-Family Parameters For Leaf Neighbors
   cisco.nxos.nxos_bgp_neighbor_address_family:
@@ -117,7 +117,7 @@
               send_community:
                 both: yes
               route_reflector_client: yes
-  with_items: '{{ bgp_leaf_neighbors }}'
+  with_items: '{{ bgp_neighbors }}'
 
 # - name: Saving running-configuration...
 #   nxos_config:
