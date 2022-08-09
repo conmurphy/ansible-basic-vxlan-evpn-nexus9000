@@ -36,8 +36,10 @@
     - name: Delete loopbacks
       cisco.nxos.nxos_interfaces:
         config:
-          - name: loopback0
-          - name: loopback1
+          - name: lo0
+            enabled: no
+          - name: lo1
+            enabled: no
         state: deleted
       ignore_errors: yes
 
