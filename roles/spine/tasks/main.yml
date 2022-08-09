@@ -42,7 +42,7 @@
   with_items: '{{ leaf_facing_ifaces }}'
 
 - name: Creating OSPF Process 'OSPF_UNDERLAY_NET'
-  nxos_ospfv3:
+  cisco.nxos.nxos_ospfv3:
     config:
       processes:
         - process_id: OSPF_UNDERLAY_NET
