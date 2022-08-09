@@ -9,9 +9,9 @@
     nv_overlay_evpn: true
 
 - name: Creating Loopback interfaces to be used as PIM RP and Router-ID
-  nxos_interface:
+  nxos_interfaces:
     name: loopback 0-1
-    admin_state: up
+    enabled: yes
   ignore_errors: yes
 
 - name: Assigning IP Addresses to the Loopback interfaces
@@ -21,11 +21,11 @@
   with_items: '{{ loopback_ip }}'
 
 - name: Configuring Leaf Facing Interfaces as L3 and with Jumbo MTU
-  nxos_interface:
+  nxos_interfaces:
     name: '{{item.name}}'
     mode: layer3
     mtu: '9216'
-    admin_state: up
+    enabled: yes
   with_items: '{{ leaf_facing_ifaces }}'
 
 - name: Configuring Leaf Facing interfaces with IP Unnumbered Parameters

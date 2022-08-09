@@ -9,9 +9,9 @@
     nv_overlay_evpn: true
 
 - name: Creating Loopback interfaces to be used as Router-ID and VTEP-ID
-  nxos_interface:
+  nxos_interfaces:
     name: loopback 0
-    admin_state: up
+    enabled: yes
   ignore_errors: yes
 
 - name: Assigning IP Addresses to the Loopback interfaces
@@ -37,11 +37,11 @@
   with_items: '{{ host_facing_ifaces }}'
 
 - name: Configuring Spine Facing Interfaces as L3 and with Jumbo MTU
-  nxos_interface:
+  nxos_interfaces:
     name: '{{item.name}}'
     mode: layer3
     mtu: '9216'
-    admin_state: up
+    enabled: yes
   with_items: '{{ spine_facing_ifaces }}'
 
 - name: Configuring Spine Facing interfaces with IP Unnumbered Parameters
@@ -146,10 +146,9 @@
   with_items: '{{ tenant_a_vrf_config }}'
 
 - name: Creating VXLAN Tunnel Interface
-  nxos_interface:
+  nxos_interfaces:
     interface: nve1
-    state: present
-    admin_state: down
+    enabled: no
 
 - name: Configuring VXLAN Tunnel Interface for MP-BGP EVPN Control Plane
   nxos_vxlan_vtep:
@@ -172,10 +171,10 @@
     assoc_vrf: yes
   with_items: '{{ tenant_a_l3_vni }}'
 
-- name: Creating Loopback interfaces to be used as Router-ID and VTEP-ID
-  nxos_interface:
+- name: Enabling NVE VXLAN tunnel interface
+  nxos_interfaces:
     name: nve1
-    admin_state: up
+    enabled: up
   ignore_errors: yes
 
 - name: Configuring L2 VNIs for EVPN
@@ -184,14 +183,6 @@
     route_distinguisher: auto
     route_target_both: auto
   with_items: '{{ tenant_a_l2_vni }}'
-
-# - name: Adding Tenant VRF Under BGP configuration
-#   nxos_bgp_af:
-#     asn: '64520'
-#     vrf: '{{ item.name }}'
-#     afi: '{{ item.afi }}'
-#     safi: '{{ item.safi }}'
-#   with_items: '{{ tenant_a_vrf_config }}'
 
 - name: Adding BGP configuration
   cisco.nxos.nxos_bgp_address_family:
@@ -208,9 +199,9 @@
       - fabric forwarding anycast-gateway-mac 0000.0000.000A
 
 - name: Creating SVIs Corresponding to VNIs
-  nxos_interface:
+  nxos_interfaces:
     name: 'vlan {{ item.vlan_id }}'
-    admin_state: up
+    enabled: yes
   with_items:
     - '{{ l2_vni_svi_list }}'
     - '{{ l3_vni_svi_list }}'
@@ -230,15 +221,15 @@
   with_items: '{{l2_vni_svi_list }}'
 
 - name: Enabling Anycast Gateway on L2VNI SVIs
-  nxos_interface:
-    interface: 'vlan {{ item.vlan_id }}'
+  nxos_interfaces:
+    name: 'vlan {{ item.vlan_id }}'
     fabric_forwarding_anycast_gateway: yes
   with_items: '{{ l2_vni_svi_list }}'
 
 - name: Configuring L3VNI SVI with 'ip forward'
-  nxos_interface:
-    interface: 'vlan {{ item.vlan_id }}'
-    ip_forward: enable
+  nxos_interfaces:
+    name: 'vlan {{ item.vlan_id }}'
+    ip_forward: yes
   with_items: '{{ l3_vni_svi_list }}'
 
 # - name: Saving Configuration
