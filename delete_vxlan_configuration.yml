@@ -26,23 +26,6 @@
         state: absent
       with_items: '{{ tenant_a_vrf_config }}'
 
-    - name: Remove Host Facing L2 Interfaces
-      nxos_l2_interfaces:
-        config: 
-          - name: '{{item.name}}'
-        state: deleted
-      with_items: '{{ host_facing_ifaces }}'
-
-    - name: Delete loopbacks
-      cisco.nxos.nxos_interfaces:
-        config:
-          - name: lo0
-            enabled: no
-          - name: lo1
-            enabled: no
-        state: deleted
-      ignore_errors: yes
-
     - name: Delete interface config
       cisco.nxos.nxos_interfaces:
         config:
@@ -51,6 +34,7 @@
       with_items: 
         - '{{ fabric_ifaces }}'
         - '{{ host_facing_ifaces }}'
+        - '{{ loopback_ifaces }}'
 
     - name: Delete VLANs
       cisco.nxos.nxos_vlans:
