@@ -2,13 +2,13 @@
 
 - hosts: spine
   strategy: free
-  gather_facts: false
+  #gather_facts: false
   roles:
     - role: spine
 
 - hosts: leaf
   strategy: free
-  gather_facts: false
+  #gather_facts: false
   roles:
     - role: leaf
 
