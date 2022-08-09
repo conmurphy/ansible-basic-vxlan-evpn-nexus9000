@@ -132,9 +132,9 @@
 - name: Creating VLANs and Mapping Them to VXLAN VNIs
   cisco.nxos.nxos_vlans:
     config:
-      vlan_id: '{{ item.vlan_id }}'
-      name: '{{ item.name }}'
-      mapped_vni: '{{ item.mapped_vni }}'
+      - vlan_id: '{{ item.vlan_id }}'
+        name: '{{ item.name }}'
+        mapped_vni: '{{ item.mapped_vni }}'
   with_items: '{{ tenant_a_vlan_to_vni }}'
 
 - name: Creating Tenant VRF and Mapping it to L3VNI
