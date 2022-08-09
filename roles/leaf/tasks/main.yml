@@ -60,8 +60,9 @@
 - name: Creating OSPF Process 'OSPF_UNDERLAY_NET'
   nxos_ospfv3:
     config:
-      - process_id: OSPF_UNDERLAY_NET
-        router_id: '{{ router_id }}'
+      processes:
+        - process_id: OSPF_UNDERLAY_NET
+          router_id: '{{ router_id }}'
 
 - name: Configuring Spine Facing Interfaces as OSPF p2p interfaces
   nxos_config:
