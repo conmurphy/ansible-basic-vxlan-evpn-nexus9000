@@ -51,6 +51,9 @@ tenant_a_vlan_to_vni:
   - vlan_id: '20'
     name: VLAN20
     mapped_vni: '100020'
+  - vlan_id: '999'
+    name: VLAN999
+    mapped_vni: '100999'
 
 # L2 VNIs for Tenant A
 

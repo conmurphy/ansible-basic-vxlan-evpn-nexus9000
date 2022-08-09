@@ -1,10 +1,12 @@
 ---
 
 - hosts: spine
+  strategy: free
   roles:
     - role: spine
 
 - hosts: leaf
+  strategy: free
   roles:
     - role: leaf
 
