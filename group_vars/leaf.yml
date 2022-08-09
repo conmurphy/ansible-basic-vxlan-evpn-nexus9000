@@ -18,7 +18,7 @@ vxlan_features:
 
 # Spine facing interfaces
 
-spine_facing_ifaces:
+fabric_ifaces:
   - name: Ethernet1/1
   - name: Ethernet1/2
 

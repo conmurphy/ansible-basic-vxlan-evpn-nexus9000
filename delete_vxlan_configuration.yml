@@ -23,8 +23,7 @@
           - name: '{{item.name}}'
         state: deleted 
       with_items: 
-        - '{{ spine_facing_ifaces }}'
-        - '{{ spine_facing_ifaces }}'
+        - '{{ fabric_ifaces }}'
         - '{{ host_facing_ifaces }}'
 
     - name: Delete VLANs

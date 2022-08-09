@@ -14,7 +14,7 @@ vxlan_features:
 
 # Leaf facing interfaces to be configured as "unnumbered"
 
-leaf_facing_ifaces:
+fabric_ifaces:
   - name: Ethernet1/1
   - name: Ethernet1/2
 

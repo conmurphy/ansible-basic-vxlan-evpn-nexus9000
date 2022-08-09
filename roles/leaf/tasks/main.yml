@@ -46,7 +46,7 @@
         mode: layer3
         mtu: '9216'
         enabled: yes
-  with_items: '{{ spine_facing_ifaces }}'
+  with_items: '{{ fabric_ifaces }}'
 
 - name: Configuring Spine Facing interfaces with IP Unnumbered Parameters
   nxos_config:
@@ -55,7 +55,7 @@
       - ip unnumbered loopback 0
     parents:
       - 'interface {{item.name}}'
-  with_items: '{{ spine_facing_ifaces }}'
+  with_items: '{{ fabric_ifaces }}'
 
 - name: Creating OSPF Process 'OSPF_UNDERLAY_NET'
   cisco.nxos.nxos_ospfv2:
@@ -70,7 +70,7 @@
       - ip ospf network point-to-point
     parents:
       - 'interface {{ item.name }}'
-  with_items: '{{ spine_facing_ifaces }}'
+  with_items: '{{ fabric_ifaces }}'
 
 - name: Assigning Interfaces to the OSPF Process
   cisco.nxos.nxos_ospf_interfaces:
@@ -83,7 +83,7 @@
                 area:
                   area_id: 0
   with_items:
-    - '{{ spine_facing_ifaces }}'
+    - '{{ fabric_ifaces }}'
     - '{{ loopback_ifaces }}'
 
 - name: Configuring PIM RP Addresses
@@ -96,7 +96,7 @@
     interface: '{{ item.name }}'
     sparse: yes
   with_items:
-    -  '{{ spine_facing_ifaces}}'
+    -  '{{ fabric_ifaces}}'
     -  '{{ loopback_ifaces }}'
 
 - name: Creating BGP Process
