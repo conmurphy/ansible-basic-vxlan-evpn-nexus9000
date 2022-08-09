@@ -8,6 +8,28 @@
         feature: '{{ item.feature }}'
         state: disabled
       with_items: '{{ vxlan_features }}'
+    
+    - name: Disable EVPN overlay
+      nxos_evpn_global:
+        nv_overlay_evpn: false
+
+    - name: Configuring Distributed Anycast Gateway MAC Address on Leaves
+      nxos_config:
+        lines:
+          - no fabric forwarding anycast-gateway-mac 0000.0000.000A
+    
+    - name: Delete Tenant VRF
+      nxos_vrf:
+        name: '{{ item.name }}'
+        state: deleted
+      with_items: '{{ tenant_a_vrf_config }}'
+
+    - name: Configuring Host Facing Interfaces as L2 
+      nxos_l2_interfaces:
+        config: 
+          - name: '{{item.name}}'
+        state: deleted
+      with_items: '{{ host_facing_ifaces }}'
 
     - name: Delete loopbacks
       cisco.nxos.nxos_interfaces:
