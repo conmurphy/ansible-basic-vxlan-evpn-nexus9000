@@ -10,8 +10,9 @@
 
 - name: Creating Loopback interfaces to be used as PIM RP and Router-ID
   nxos_interfaces:
-    name: loopback 0-1
-    enabled: yes
+    config:
+      - name: loopback 0-1
+        enabled: yes
   ignore_errors: yes
 
 - name: Assigning IP Addresses to the Loopback interfaces
@@ -22,10 +23,11 @@
 
 - name: Configuring Leaf Facing Interfaces as L3 and with Jumbo MTU
   nxos_interfaces:
-    name: '{{item.name}}'
-    mode: layer3
-    mtu: '9216'
-    enabled: yes
+    config:
+      - name: '{{item.name}}'
+        mode: layer3
+        mtu: '9216'
+        enabled: yes
   with_items: '{{ leaf_facing_ifaces }}'
 
 - name: Configuring Leaf Facing interfaces with IP Unnumbered Parameters

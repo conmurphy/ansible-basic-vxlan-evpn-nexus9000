@@ -10,8 +10,9 @@
 
 - name: Creating Loopback interfaces to be used as Router-ID and VTEP-ID
   nxos_interfaces:
-    name: loopback 0
-    enabled: yes
+    config:
+      - name: loopback 0
+        enabled: yes
   ignore_errors: yes
 
 - name: Assigning IP Addresses to the Loopback interfaces
@@ -38,10 +39,11 @@
 
 - name: Configuring Spine Facing Interfaces as L3 and with Jumbo MTU
   nxos_interfaces:
-    name: '{{item.name}}'
-    mode: layer3
-    mtu: '9216'
-    enabled: yes
+    config:
+      - name: '{{item.name}}'
+        mode: layer3
+        mtu: '9216'
+        enabled: yes
   with_items: '{{ spine_facing_ifaces }}'
 
 - name: Configuring Spine Facing interfaces with IP Unnumbered Parameters
@@ -147,8 +149,9 @@
 
 - name: Creating VXLAN Tunnel Interface
   nxos_interfaces:
-    interface: nve1
-    enabled: no
+    config:
+      - interface: nve1
+        enabled: no
 
 - name: Configuring VXLAN Tunnel Interface for MP-BGP EVPN Control Plane
   nxos_vxlan_vtep:
@@ -173,8 +176,9 @@
 
 - name: Enabling NVE VXLAN tunnel interface
   nxos_interfaces:
-    name: nve1
-    enabled: up
+    config:
+      - name: nve1
+        enabled: up
   ignore_errors: yes
 
 - name: Configuring L2 VNIs for EVPN
@@ -200,8 +204,9 @@
 
 - name: Creating SVIs Corresponding to VNIs
   nxos_interfaces:
-    name: 'vlan {{ item.vlan_id }}'
-    enabled: yes
+    config:
+      - name: 'vlan {{ item.vlan_id }}'
+        enabled: yes
   with_items:
     - '{{ l2_vni_svi_list }}'
     - '{{ l3_vni_svi_list }}'
@@ -222,14 +227,16 @@
 
 - name: Enabling Anycast Gateway on L2VNI SVIs
   nxos_interfaces:
-    name: 'vlan {{ item.vlan_id }}'
-    fabric_forwarding_anycast_gateway: yes
+    config:
+      - name: 'vlan {{ item.vlan_id }}'
+        fabric_forwarding_anycast_gateway: yes
   with_items: '{{ l2_vni_svi_list }}'
 
 - name: Configuring L3VNI SVI with 'ip forward'
   nxos_interfaces:
-    name: 'vlan {{ item.vlan_id }}'
-    ip_forward: yes
+    config:
+      - name: 'vlan {{ item.vlan_id }}'
+        ip_forward: yes
   with_items: '{{ l3_vni_svi_list }}'
 
 # - name: Saving Configuration
