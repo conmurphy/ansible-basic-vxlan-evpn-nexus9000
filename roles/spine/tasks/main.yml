@@ -117,7 +117,7 @@
               send_community:
                 both: yes
               route_reflector_client: yes
-  with_items: '{{ bgp_spine_neighbors }}'
+  with_items: '{{ bgp_leaf_neighbors }}'
 
 # - name: Saving running-configuration...
 #   nxos_config:
