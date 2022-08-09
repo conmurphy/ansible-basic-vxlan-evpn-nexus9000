@@ -9,13 +9,8 @@
       nxos_config:
         lines:
           - no fabric forwarding anycast-gateway-mac 
-      register: result
       ignore_errors: yes
       
-    - name: fail the play if the previous command did not succeed
-      fail:
-        msg: "{{result}} {{result.stderr}}"
-      when: "'FAILED' in result.stderr"
     # Needed to add this as the loopback interfaces were not being deleted 
     # and I don't have time to troubleshoot
     - name: Delete Loopback Interfaces
