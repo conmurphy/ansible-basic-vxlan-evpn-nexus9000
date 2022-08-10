@@ -50,15 +50,25 @@
       when: fabric_ifaces is defined
       ignore_errors: yes
     
-    - name: Delete interface config
-      cisco.nxos.nxos_interfaces:
-        config:
+    # - name: Delete interface config
+    #   cisco.nxos.nxos_interfaces:
+    #     config:
+    #       - name: '{{item.name}}'
+    #     state: deleted 
+    #   with_items: 
+    #     - '{{ host_facing_ifaces }}'
+    #   when: host_facing_ifaces is defined
+    #   ignore_errors: yes
+
+    - name: Delete VLANs from L2 host facing interfaces 
+      nxos_l2_interfaces:
+        config: 
           - name: '{{item.name}}'
-        state: deleted 
-      with_items: 
-        - '{{ host_facing_ifaces }}'
-      when: host_facing_ifaces is defined
-      ignore_errors: yes
+            mode: access
+            access: 
+              vlan: '{{item.vlan_id}}'
+        state: deleted
+      with_items: '{{ host_facing_ifaces }}'
 
     - name: Delete interface config
       cisco.nxos.nxos_interfaces:
