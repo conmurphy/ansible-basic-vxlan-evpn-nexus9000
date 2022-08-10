@@ -2,7 +2,9 @@
   gather_facts: False
   remote_user: "cisco"
   vars:
-    ansible_become_password: "cisco"
+    ansible_connection: ssh
+    ansible_user: cisco
+    ansible_ssh_pass: cisco
   tasks:
     - name: ping
       shell: ping 8.8.8.8
