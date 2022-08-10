@@ -8,7 +8,7 @@
 
 ## Devices, Interfaces, and Addresses
 
-<img src="image url" alt="Lab Topology" />
+<img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/topology.png?raw=true" alt="Lab Topology" />
 
 ## Directory and File Structure
 
