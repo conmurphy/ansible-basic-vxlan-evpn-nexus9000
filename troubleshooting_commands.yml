@@ -109,7 +109,6 @@
   vars:
     ansible_user: cisco
     ansible_ssh_pass: cisco
-    tag: ""
     commands:
       - command: ping -c 3 8.8.8.8; exit 0
         tags: 
@@ -118,14 +117,14 @@
         tags: 
         - ping
   tasks:
-    - name: IF TAG PROVIDED - Run show commands based on tag
+    - name: TAG PROVIDED - Running ping
       set_fact:
         commands: "{{ commands | json_query(query) }}"
       vars:
         query: "[?tags.contains(@, '{{ tag }}')].command"
       when: tag != ""
     
-    - name: IF NO TAG PROVIDED - Run all show commands
+    - name: NO TAG PROVIDED - Running ping
       set_fact:
         commands: "{{ commands | json_query(query) }}"
       vars:
