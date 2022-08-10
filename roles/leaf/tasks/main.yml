@@ -179,13 +179,6 @@
     assoc_vrf: yes
   with_items: '{{ tenant_a_l3_vni }}'
 
-- name: Enabling NVE VXLAN tunnel interface
-  nxos_interfaces:
-    config:
-      - name: nve1
-        enabled: yes
-  ignore_errors: yes
-
 - name: Configuring L2 VNIs for EVPN
   nxos_evpn_vni:
     vni: '{{ item.vni }}'
@@ -245,6 +238,13 @@
       - name: 'vlan {{ item.vlan_id }}'
         ip_forward: yes
   with_items: '{{ l3_vni_svi_list }}'
+
+- name: Enabling NVE VXLAN tunnel interface
+  nxos_interfaces:
+    config:
+      - name: nve1
+        enabled: yes
+  ignore_errors: yes
 
 # - name: Saving Configuration
 #   nxos_config:
