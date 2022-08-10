@@ -104,7 +104,7 @@
       loop_control:
         label: "{{ item.item }}"
     
-- hosts: 10.10.53.152
+- hosts: server
   gather_facts: no
   vars:
     ansible_user: cisco
