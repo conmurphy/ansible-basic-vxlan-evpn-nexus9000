@@ -11,6 +11,6 @@
   
     - name:  STDOUT - Verificaiton Commands
       debug: 
-        msg: "{{ ping_results }}"
+        msg: "{{ ping_results.stdout_lines[0] }}"
       ignore_errors: yes
       
