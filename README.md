@@ -15,7 +15,7 @@ This repo provides a basic VXLAN spine/leaf configuration using Ansible and Cisc
 <img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/vxlan-lab-topology.png?raw=true" alt="Lab Topology" />
 
 
-<img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/management-topology.png?raw=true" alt="Management Topology" />
+<img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/management-lab-topology.png?raw=true" alt="Management Topology" />
 
 ## Directory and File Structure
 
