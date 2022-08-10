@@ -10,7 +10,7 @@
 
 ## Devices, Interfaces, and Addresses
 
-<img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/topology.png?raw=true" alt="Lab Topology" />
+<img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/vxlan.png?raw=true" alt="Lab Topology" />
 
 
 <img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/management.png?raw=true" alt="Management Topology" />
