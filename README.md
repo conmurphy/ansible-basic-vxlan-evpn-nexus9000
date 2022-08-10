@@ -21,14 +21,11 @@ This repo provides a basic VXLAN spine/leaf configuration using Ansible and Cisc
 
 <img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/directory.png?raw=true" alt="Directory and file structure" />
 
-### Ansible configuration
-
-An `ansible.cfg` file is available in the root directory of the repo and is configured with the following settings:
-
-- `force_color=True`
-- `[colors]` 
-
 ## Building and Destroying The Lab
+
+Ansible is installed and configured on the `ubuntu-0` server in the `ansible-basic-vxlan-evpn-nexus9000` directory. If this directory does not exist you can clone it with the following command.
+
+`git clone https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000.git`
 
 There is an Ansible Playbook, `configure_vxlan.yml`, which you can use to configure VXLAN on the two spine and two leaf switches.
 
@@ -37,6 +34,13 @@ There is an Ansible Playbook, `configure_vxlan.yml`, which you can use to config
 To reset the environent use the `delete_vxlan_configuration.yml` playbook.
 
 `ansible-playbook -i hosts.yml delete_vxlan_configuration.yml`
+
+### Ansible configuration
+
+An `ansible.cfg` file is available in the root directory of the repo and is configured with the following settings:
+
+- `force_color=True`
+- `[colors]` 
 
 ## Verification and Troubleshooting Playbook
 
