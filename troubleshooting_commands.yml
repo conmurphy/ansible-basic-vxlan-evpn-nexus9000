@@ -109,7 +109,7 @@
   vars:
     ansible_user: cisco
     ansible_ssh_pass: cisco
-    commands:
+    ping_commands:
       - command: ping -c 3 8.8.8.8; exit 0
         tags: 
         - ping
@@ -119,27 +119,27 @@
   tasks:
     - name: TAG PROVIDED - Running ping
       set_fact:
-        commands: "{{ commands | json_query(query) }}"
+        ping_commands: "{{ ping_commands | json_query(query) }}"
       vars:
         query: "[?tags.contains(@, '{{ tag }}')].command"
       when: tag != ""
     
     - name: NO TAG PROVIDED - Running ping
       set_fact:
-        commands: "{{ commands | json_query(query) }}"
+        ping_commands: "{{ ping_commands | json_query(query) }}"
       vars:
         query: "[].command"
       when: tag == ""
     
     - name:  STDOUT - Items
       debug: 
-        msg: "{{ commands }}"
+        msg: "{{ ping_commands }}"
 
     - name: Run show commands on remote devices
       raw: "{{ item }}"
       ignore_errors: yes
       register: echo
-      with_items: "{{ commands }}"
+      with_items: "{{ ping_commands }}"
 
     - name:  STDOUT - Ping Results
       debug: 
