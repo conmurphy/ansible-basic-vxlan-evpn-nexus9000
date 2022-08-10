@@ -1,5 +1,7 @@
 # Ansible VXLAN Notes
 
+[If you're viewing this through CML and the images don't appear, the lab notes can also be found here](https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000)
+
 ## Table of Contents
 - [Devices, Interfaces, and Addresses](#devices-interfaces-and-addresses)
 - [Directory and File Structure](#directory-and-file-structure)
@@ -8,9 +10,15 @@
 
 ## Devices, Interfaces, and Addresses
 
-<img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/topology.png?raw=true" alt="Lab Topology" />
+<img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/directory.png?raw=true" alt="Directory and file structure" />
+
 
 ## Directory and File Structure
+
+<img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/topology.png?raw=true" alt="Lab Topology" />
+
+[The lab notes can also be found here](https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000)
+
 
 ## Setup configuration
 
