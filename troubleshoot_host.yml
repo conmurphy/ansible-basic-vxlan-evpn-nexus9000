@@ -1,9 +1,9 @@
 - hosts: 10.10.53.152
-  gather_facts: False
+  gather_facts: no
   vars:
     ansible_user: cisco
     ansible_ssh_pass: cisco
   tasks:
-    - name: ping
-      shell: ping 8.8.8.8
-      ignore_errors: true
+    - name: Ping hosts
+      raw: ping 8.8.8.8
+      register: ping_results
