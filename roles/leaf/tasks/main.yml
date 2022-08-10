@@ -152,17 +152,18 @@
     route_target_both_auto_evpn: yes
   with_items: '{{ tenant_a_vrf_config }}'
 
-- name: Creating VXLAN Tunnel Interface
-  nxos_interfaces:
-    config:
-      - name: nve1
-        enabled: no
+# - name: Creating VXLAN Tunnel Interface
+#   nxos_interfaces:
+#     config:
+#       - name: nve1
+#         enabled: no
 
 - name: Configuring VXLAN Tunnel Interface for MP-BGP EVPN Control Plane
   nxos_vxlan_vtep:
     interface: nve1
     host_reachability: yes
     source_interface: loopback0
+    shutdown: no
 
 - name: Adding L2 VNIs to VXLAN Tunnel Interface
   nxos_vxlan_vtep_vni:
@@ -238,13 +239,6 @@
       - name: 'vlan {{ item.vlan_id }}'
         ip_forward: yes
   with_items: '{{ l3_vni_svi_list }}'
-
-- name: Enabling NVE VXLAN tunnel interface
-  nxos_interfaces:
-    config:
-      - name: nve1
-        enabled: yes
-  ignore_errors: yes
 
 # - name: Saving Configuration
 #   nxos_config:
