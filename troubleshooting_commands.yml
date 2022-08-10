@@ -130,6 +130,10 @@
       vars:
         query: "[].command"
       when: tag == ""
+    
+    - name:  STDOUT - Items
+      debug: 
+        msg: "{{ commands }}"
 
     - name: Run show commands on remote devices
       raw: "{{ item }}"
