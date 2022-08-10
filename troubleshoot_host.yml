@@ -5,7 +5,7 @@
     ansible_ssh_pass: cisco
   tasks:
     - name: Ping hosts
-      raw: ping -c 3 10.10.53.151
+      raw: ping -c 3 8.8.8.8
       register: ping_results
       ignore_errors: true
   
