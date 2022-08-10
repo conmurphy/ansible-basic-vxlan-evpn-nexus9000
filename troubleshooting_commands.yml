@@ -1,4 +1,68 @@
-- hosts: spine:leaf
+- hosts: spine
+  gather_facts: False
+  #strategy: free
+  vars:
+    tag: ""
+    commands:
+      - command: show version
+        tags: 
+        - mgmt
+      - command: show module
+        tags: 
+        - mgmt
+      - command: show interface brief
+        tags: 
+        - underlay
+      - command: show ip interface brief
+        tags: 
+        - underlay
+      - command: show ip ospf neighbors 
+        tags: 
+        - underlay
+      - command: show ip route ospf-OSPF_UNDERLAY_NET 
+        tags: 
+        - underlay
+      - command: show ip pim interface brief 
+        tags: 
+        - multicast
+      - command: show ip pim rp 
+        tags: 
+        - multicast
+      - command: show ip bgp neighbors
+        tags: 
+        - control
+
+  tasks:
+    - name: IF TAG PROVIDED - Run show commands based on tag
+      set_fact:
+        commands: "{{ commands | json_query(query) }}"
+      vars:
+        query: "[?tags.contains(@, '{{ tag }}')].command"
+      when: tag != ""
+    
+    - name: IF NO TAG PROVIDED - Run all show commands
+      set_fact:
+        commands: "{{ commands | json_query(query) }}"
+      vars:
+        query: "[].command"
+      when: tag == ""
+
+    - name: Run show commands on remote devices
+      cisco.nxos.nxos_command:
+        commands: "{{ item }}"
+      ignore_errors: yes
+      register: echo
+      with_items: "{{ commands }}"
+
+    - name:  STDOUT - Verificaiton Commands
+      debug: 
+        msg: "{{ item.stdout_lines[0] }}"
+      ignore_errors: yes
+      with_items: "{{ echo.results }}"
+      loop_control:
+        label: "{{ item.item }}"
+
+- hosts: leaf
   gather_facts: False
   #strategy: free
   vars:
@@ -103,7 +167,7 @@
       with_items: "{{ echo.results }}"
       loop_control:
         label: "{{ item.item }}"
-    
+
 - hosts: server
   gather_facts: no
   vars:
