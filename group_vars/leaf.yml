@@ -81,10 +81,10 @@ tenant_a_vrf_config:
 l2_vni_svi_list:
   - vlan_id: '10'
     vrf: tenant_a
-    ip: 10.10.1.254/24
+    ip: 172.16.10.254/24
   - vlan_id: '20'
     vrf: tenant_a
-    ip: 10.20.1.254/24
+    ip: 172.16.20.254/24
     
 
 # List of SVIs corresponding to L2VNIs

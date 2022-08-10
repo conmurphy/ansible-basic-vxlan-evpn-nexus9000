@@ -44,6 +44,7 @@ The following tags are available to filter the output of the troubleshooting pla
 - overlay
 - l2vni
 - l3vni
+- ping
 
 `ansible-playbook -i hosts troubleshooting_commands.yml --extra-vars "tag=l2vni"`
 
