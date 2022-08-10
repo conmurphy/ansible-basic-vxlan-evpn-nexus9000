@@ -110,10 +110,16 @@
     ansible_user: cisco
     ansible_ssh_pass: cisco
     who_to_ping:
-      - endpoint: ping -c 3 10.10.1.2; exit 0
+      - endpoint: ping -c 3 172.16.10.254; exit 0
         tags: 
         - ping
-      - endpoint: ping -c 3 10.20.1.1; exit 0
+      - endpoint: ping -c 3 172.16.20.254; exit 0
+        tags: 
+        - ping
+      - endpoint: ping -c 3 172.16.10.2; exit 0
+        tags: 
+        - ping
+      - endpoint: ping -c 3 172.16.20.1; exit 0
         tags: 
         - ping
   tasks:
