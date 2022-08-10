@@ -12,6 +12,9 @@
 
 <img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/topology.png?raw=true" alt="Lab Topology" />
 
+
+<img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/management.png?raw=true" alt="Management Topology" />
+
 ## Directory and File Structure
 
 <img src="https://github.com/conmurphy/ansible-basic-vxlan-evpn-nexus9000/blob/main/images/directory.png?raw=true" alt="Directory and file structure" />
