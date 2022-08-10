@@ -1,4 +1,5 @@
 - hosts: 10.10.53.152
+  gather_facts: False
   remote_user: "cisco"
   vars:
     ansible_become_password: "cisco"
