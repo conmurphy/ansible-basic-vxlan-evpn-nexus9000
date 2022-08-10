@@ -1,0 +1,8 @@
+- hosts: host-a
+  remote_user: "cisco"
+  vars:
+    ansible_become_password: "cisco"
+  tasks:
+    - name: ping
+      shell: ping 8.8.8.8
+      ignore_errors: true
