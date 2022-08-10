@@ -16,5 +16,5 @@ spine-2 ansible_host=10.10.53.154
 leaf-1 ansible_host=10.10.53.155
 leaf-2 ansible_host=10.10.53.156
 
-[host]
+[server]
 host-a ansible_host=10.10.53.152
