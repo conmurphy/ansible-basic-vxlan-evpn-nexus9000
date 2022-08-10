@@ -1,14 +1,4 @@
-; [all:vars]
-; ansible_connection=ansible.netcommon.httpapi
-; ansible_network_os=cisco.nxos.nxos
-; ansible_httpapi_port=443
-; ansible_httpapi_use_ssl=yes
-; ansible_httpapi_validate_certs=no
-; ansible_user=cisco
-; ansible_password=cisco
-
-
-[spine]
+[spine:vars]
 ansible_connection=ansible.netcommon.httpapi
 ansible_network_os=cisco.nxos.nxos
 ansible_httpapi_port=443
@@ -16,17 +6,13 @@ ansible_httpapi_use_ssl=yes
 ansible_httpapi_validate_certs=no
 ansible_user=cisco
 ansible_password=cisco
+
+
+[spine]
 spine-1 ansible_host=10.10.53.153
 spine-2 ansible_host=10.10.53.154
 
 [leaf]
-ansible_connection=ansible.netcommon.httpapi
-ansible_network_os=cisco.nxos.nxos
-ansible_httpapi_port=443
-ansible_httpapi_use_ssl=yes
-ansible_httpapi_validate_certs=no
-ansible_user=cisco
-ansible_password=cisco
 leaf-1 ansible_host=10.10.53.155
 leaf-2 ansible_host=10.10.53.156
 
