@@ -59,6 +59,6 @@ The following tags are available to filter the output of the troubleshooting pla
 - l3vni
 - ping
 
-`ansible-playbook -i hosts troubleshooting_commands.yml --extra-vars "tag=l2vni"`
+`ansible-playbook -i hosts troubleshooting_commands.yml --extra-vars "tag=ping"`
 
-`ansible-playbook -i hosts troubleshooting_commands.yml --limit leaf-1 -e "tag=l2vni"`
+`ansible-playbook -i hosts troubleshooting_commands.yml --limit leaf -e "tag=l2vni"`
