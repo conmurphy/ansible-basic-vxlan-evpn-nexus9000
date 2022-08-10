@@ -1,4 +1,4 @@
-- hosts: host-a
+- hosts: 10.10.53.152
   remote_user: "cisco"
   vars:
     ansible_become_password: "cisco"
