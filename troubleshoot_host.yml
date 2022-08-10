@@ -1,8 +1,6 @@
 - hosts: 10.10.53.152
   gather_facts: False
-  remote_user: "cisco"
   vars:
-    ansible_connection: ssh
     ansible_user: cisco
     ansible_ssh_pass: cisco
   tasks:
