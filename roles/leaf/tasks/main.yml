@@ -224,7 +224,6 @@
       - name: 'vlan {{ item.vlan_id }}'
         ipv4: 
           - address: '{{ item.ip }}'
-        enabled: yes
   with_items: '{{l2_vni_svi_list }}'
 
 - name: Enabling Anycast Gateway on L2VNI SVIs
@@ -232,7 +231,6 @@
     config:
       - name: 'vlan {{ item.vlan_id }}'
         fabric_forwarding_anycast_gateway: yes
-        enabled: yes
   with_items: '{{ l2_vni_svi_list }}'
 
 - name: Configuring L3VNI SVI with 'ip forward'
@@ -240,7 +238,6 @@
     config:
       - name: 'vlan {{ item.vlan_id }}'
         ip_forward: yes
-        enabled: yes
   with_items: '{{ l3_vni_svi_list }}'
 
 # - name: Saving Configuration
